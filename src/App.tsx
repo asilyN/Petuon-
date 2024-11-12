@@ -1,4 +1,3 @@
-// App.tsx
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Dashboard from './layouts/Dashboard';
@@ -13,11 +12,17 @@ const App: React.FC = () => {
     <TaskProvider>  {/* Wrap the application in TaskProvider */}
       <Router>
         <Routes>
+          {/* Main Route */}
           <Route path="/" element={<Dashboard />} />
+          
+          {/* Additional Routes */}
           <Route path="/calendar" element={<Calendar />} />
           <Route path="/flashcard" element={<FlashCard />} />
           <Route path="/todo" element={<ToDoList />} />
           <Route path="/notes" element={<Notes />} />
+          
+          {/* Optional: You can add dynamic routes for task details like: */}
+          <Route path="/todo/:id" element={<ToDoList />} />  {/* Example of dynamic route */}
         </Routes>
       </Router>
     </TaskProvider>

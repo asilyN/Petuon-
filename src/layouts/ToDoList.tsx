@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';  // Import useLocation to access passed state
 import { LayoutDashboard, WalletCards, CalendarRange, NotebookPen, ListTodo, Trash2 } from 'lucide-react';
 import logo from '../assets/logo.png';
 import { Button } from '../components/Button';
@@ -12,6 +12,16 @@ const ToDoList: React.FC = () => {
     const [dueDate, setDueDate] = useState('');
     const [dueTime, setDueTime] = useState('');
     const [sortOption, setSortOption] = useState<string>('default'); // State for sorting
+    const location = useLocation();  // Using useLocation to access the passed task from the calendar
+
+    const taskFromCalendar = location.state?.task;  // Accessing task passed via state from the calendar
+
+    useEffect(() => {
+        if (taskFromCalendar) {
+            // Do something with the task from the calendar (e.g., display details)
+            console.log('Task from Calendar:', taskFromCalendar);
+        }
+    }, [taskFromCalendar]);
 
     const handleAddTask = (event: React.FormEvent) => {
         event.preventDefault();
@@ -50,6 +60,12 @@ const ToDoList: React.FC = () => {
         return new Date(dueDateTime) < new Date();
     };
 
+    const handleDeleteTask = (index: number) => {
+        if (window.confirm('Are you sure you want to delete this task?')) {
+            deleteTask(index);
+        }
+    };
+
     return (
         <div
             className="flex gap-2 lg:gap-4 justify-start"
@@ -63,7 +79,7 @@ const ToDoList: React.FC = () => {
             }}
         >
             {/* Sidebar */}
-            <div className="flex flex-col items-center gap-[45px] flex-shrink-0 rounded-3xl">
+            <div className="flex flex-col items-center gap-[45px] flex-shrink-0 rounded-3xl sticky top-0">
                 <Link to="/">
                     <img src={logo} className="h-[130px]" alt="Logo" />
                 </Link>
@@ -104,23 +120,24 @@ const ToDoList: React.FC = () => {
             >
                 <h1 className="text-2xl font-bold mb-4">To Do List</h1>
 
+
                 {/* Sort Buttons */}
                 <div className="mb-4 flex gap-2">
                     <button
                         onClick={() => setSortOption('default')}
-                        className={`px-3 py-1 rounded-full text-sm ${sortOption === 'default' ? 'bg-blue-500 text-white' : 'bg-white border'}`}
+                        className={`px-3 py-1 rounded-full text-sm ${sortOption === 'default' ? 'bg-[#719191] text-white' : 'bg-white border'}`}
                     >
                         Default
                     </button>
                     <button
                         onClick={() => setSortOption('oldest')}
-                        className={`px-3 py-1 rounded-full text-sm ${sortOption === 'oldest' ? 'bg-blue-500 text-white' : 'bg-white border'}`}
+                        className={`px-3 py-1 rounded-full text-sm ${sortOption === 'oldest' ? 'bg-[#719191] text-white' : 'bg-white border'}`}
                     >
                         Oldest
                     </button>
                     <button
                         onClick={() => setSortOption('newest')}
-                        className={`px-3 py-1 rounded-full text-sm ${sortOption === 'newest' ? 'bg-blue-500 text-white' : 'bg-white border'}`}
+                        className={`px-3 py-1 rounded-full text-sm ${sortOption === 'newest' ? 'bg-[#719191] text-white' : 'bg-white border'}`}
                     >
                         Newest
                     </button>
@@ -157,7 +174,12 @@ const ToDoList: React.FC = () => {
                     {sortedTasks.length > 0 ? (
                         <ul>
                             {sortedTasks.map((task, index) => (
-                                <li key={index} className="flex justify-between items-center p-2 bg-gray-100 rounded-lg mb-2 shadow">
+                                <li
+                                    key={index}
+                                    className={`flex justify-between items-center p-2 rounded-lg mb-2 shadow ${
+                                        isTaskExpired(task.dueDateTime) ? 'bg-red-100' : 'bg-gray-100'
+                                    }`}
+                                >
                                     <div className="flex items-center">
                                         <input
                                             type="checkbox"
@@ -168,17 +190,23 @@ const ToDoList: React.FC = () => {
                                         />
                                         <label
                                             htmlFor={`task-checkbox-${index}`}
-                                            className={`mr-2 w-6 h-6 rounded-full border-2 ${task.completed ? 'bg-[#719191] border-[#719191]' : 'border-gray-300'} cursor-pointer peer-checked:bg-[#719191] peer-checked:border-[#719191]`}
+                                            className={`mr-2 w-6 h-6 rounded-full border-2 ${
+                                                task.completed ? 'bg-[#719191] border-[#719191]' : 'border-gray-300'
+                                            } cursor-pointer peer-checked:bg-[#719191] peer-checked:border-[#719191]`}
                                         />
-                                        <span className={task.completed ? "line-through text-gray-400" : ""}>
+                                        <span className={task.completed ? 'line-through text-gray-400' : ''}>
                                             {task.name}
                                         </span>
                                     </div>
-                                    <span className={`text-xs ${isTaskExpired(task.dueDateTime) ? 'text-red-500' : 'text-gray-600'}`}>
+                                    <span
+                                        className={`text-xs ${
+                                            isTaskExpired(task.dueDateTime) ? 'text-red-500' : 'text-gray-600'
+                                        }`}
+                                    >
                                         {task.dueDateTime} {isTaskExpired(task.dueDateTime) && '(Past Due)'}
                                     </span>
                                     <button
-                                        onClick={() => deleteTask(index)}
+                                        onClick={() => handleDeleteTask(index)}
                                         className="ml-4 text-red-500 hover:text-red-700"
                                     >
                                         <Trash2 size={18} />

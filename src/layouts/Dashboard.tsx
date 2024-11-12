@@ -3,10 +3,16 @@ import { useTasks } from './TaskContext';
 import Sidebar from './Sidebar';  // Import Sidebar component
 import { Trash2 } from 'lucide-react';
 import BG from '../assets/BG.png';
+import { Link } from 'react-router-dom';  // Import Link from react-router-dom
 
 const Dashboard: React.FC = () => {
     const { tasks, toggleTaskCompletion, deleteTask } = useTasks();
     const [sortOption, setSortOption] = useState<string>('default');
+    const [flashcardSets, setFlashcardSets] = useState<any[]>([  // Example flashcard sets data
+        { name: "Set 1", progress: 80 },
+        { name: "Set 2", progress: 50 },
+        { name: "Set 3", progress: 90 }
+    ]);
 
     // Sorting function for tasks
     const sortTasks = (tasks: any[]) => {
@@ -29,6 +35,12 @@ const Dashboard: React.FC = () => {
 
     const isTaskExpired = (dueDateTime: string) => {
         return new Date(dueDateTime) < new Date();
+    };
+
+    // Function to calculate total progress across all flashcard sets
+    const calculateTotalProgress = () => {
+        const totalProgress = flashcardSets.reduce((acc, set) => acc + set.progress, 0);
+        return flashcardSets.length > 0 ? totalProgress / flashcardSets.length : 0;
     };
 
     return (
@@ -61,7 +73,11 @@ const Dashboard: React.FC = () => {
                     {/* My Tasks Container */}
                     <div
                         className="bg-white rounded-2xl shadow-lg p-6"
-                        style={{ height: '400px', overflowY: 'auto' }}
+                        style={{
+                            maxHeight: '400px',  // Set a max height
+                            position: 'relative',
+                            overflow: 'hidden',  // Hide any overflow
+                        }}
                     >
                         <h2 className="text-lg font-semibold">My Tasks</h2>
 
@@ -72,19 +88,19 @@ const Dashboard: React.FC = () => {
                         <div className="mt-4 mb-4 flex gap-2 justify-start items-center">
                             <button
                                 onClick={() => setSortOption('default')}
-                                className={`px-3 py-1 rounded-full text-sm ${sortOption === 'default' ? 'bg-blue-500 text-white' : 'bg-white border'}`}
+                                className={`px-3 py-1 rounded-full text-sm ${sortOption === 'default' ? 'bg-[#719191] text-white' : 'bg-white border'}`}
                             >
                                 Default
                             </button>
                             <button
                                 onClick={() => setSortOption('oldest')}
-                                className={`px-3 py-1 rounded-full text-sm ${sortOption === 'oldest' ? 'bg-blue-500 text-white' : 'bg-white border'}`}
+                                className={`px-3 py-1 rounded-full text-sm ${sortOption === 'oldest' ? 'bg-[#719191] text-white' : 'bg-white border'}`}
                             >
                                 Oldest
                             </button>
                             <button
                                 onClick={() => setSortOption('newest')}
-                                className={`px-3 py-1 rounded-full text-sm ${sortOption === 'newest' ? 'bg-blue-500 text-white' : 'bg-white border'}`}
+                                className={`px-3 py-1 rounded-full text-sm ${sortOption === 'newest' ? 'bg-[#719191] text-white' : 'bg-white border'}`}
                             >
                                 Newest
                             </button>
@@ -94,7 +110,7 @@ const Dashboard: React.FC = () => {
                         <div className="mt-4 space-y-2">
                             {sortedTasks.length > 0 ? (
                                 <ul>
-                                    {sortedTasks.map((task, index) => (
+                                    {sortedTasks.slice(0, 5).map((task, index) => ( // Limit to 5 tasks
                                         <li key={index} className="flex justify-between items-center p-2 bg-gray-100 rounded-lg mb-2 shadow">
                                             <div className="flex items-center">
                                                 {/* Circular Checkbox */}
@@ -131,6 +147,16 @@ const Dashboard: React.FC = () => {
                                 <p className="text-gray-500 text-sm">No tasks available.</p>
                             )}
                         </div>
+
+                        {/* View All Button positioned at the lower left corner */}
+                        <div className="absolute bottom-3 left-7">
+                            <Link
+                                to="/todo"  // Updated link to match the route in App.tsx
+                                className="text-black-500 hover:text-black-700 text-sm"
+                            >
+                                View All
+                            </Link>
+                        </div>
                     </div>
 
                     {/* Progress Container */}
@@ -138,7 +164,6 @@ const Dashboard: React.FC = () => {
                         <h2 className="text-lg font-semibold">Pet</h2>
                         {/* Gray Line Separator */}
                         <div className="border-t border-gray-300 mt-2 mb-4"></div>
-                        {/* Add additional content here */}
                     </div>
                 </div>
 
@@ -155,7 +180,17 @@ const Dashboard: React.FC = () => {
                         <h2 className="text-lg font-semibold">Progress</h2>
                         {/* Gray Line Separator */}
                         <div className="border-t border-gray-300 mt-2 mb-4"></div>
-                        <div className="mt-4">{/* Add Progress Content Here */}</div>
+                         {/* Progress Bar for Total Flashcard Progress */}
+                         <h3 className="text-xl font-semibold">Total Flashcard Progress</h3>
+                        <p className="text-lg mt-2">
+                            Progress: {Math.round(calculateTotalProgress())}%
+                        </p>
+                        <div className="w-full bg-gray-300 h-2 rounded-full mt-2">
+                            <div
+                                className="bg-blue-500 h-2 rounded-full"
+                                style={{ width: `${Math.round(calculateTotalProgress())}%` }}
+                            ></div>
+                        </div>
                     </div>
                 </div>
             </div>

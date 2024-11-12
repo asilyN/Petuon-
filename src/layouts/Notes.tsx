@@ -1,12 +1,11 @@
-// Notes.tsx
 import React, { useState, useEffect } from "react";
 import ReactQuill from "react-quill";
+declare module 'react-quill';
 import Sidebar from './Sidebar';  // Import Sidebar component
-import { PlusCircle, FilePen, Trash2 } from "lucide-react";
+import { PlusCircle, FilePen, Trash2, Upload } from "lucide-react"; // Add Upload icon
 import BG from "../assets/BG.png";
 import "react-quill/dist/quill.snow.css";
 
-// Updated getRandomPastelColor function to randomize specific colors
 const getRandomPastelColor = () => {
     const colors = ["#FE9B72", "#FFC973", "#E5EE91", "#B692FE"];
     const randomIndex = Math.floor(Math.random() * colors.length);
@@ -16,25 +15,30 @@ const getRandomPastelColor = () => {
 const Notes: React.FC = () => {
     const [notes, setNotes] = useState<any[]>([]);
     const [currentTitle, setCurrentTitle] = useState<string>("");
-    const [currentNote, setCurrentNote] = useState<string>("");
+    const [currentNote, setCurrentNote] = useState<string>(""); 
     const [editingNote, setEditingNote] = useState<number | null>(null);
     const [creatingNewNote, setCreatingNewNote] = useState<boolean>(false);
     const [filter, setFilter] = useState<string>("All");
+    const [selectedNote, setSelectedNote] = useState<any | null>(null); // New state for the selected note
 
     const handleEditorChange = (value: string) => setCurrentNote(value);
 
     const saveNote = () => {
         if (currentNote.trim() === "" || currentTitle.trim() === "") return;
+    
+        // Strip out <p> tags from the content
+        const strippedNoteContent = currentNote.replace(/<\/?p>/g, '');
+    
         const newNote = {
             id: Date.now(),
             title: currentTitle,
-            content: currentNote,
+            content: strippedNoteContent, // Save the stripped content
             color: getRandomPastelColor(),
             createdDate: new Date().toLocaleDateString(),
             createdTime: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
             timestamp: new Date().getTime(),
         };
-
+    
         const updatedNotes = editingNote !== null 
             ? notes.map((note) => note.id === editingNote ? newNote : note) 
             : [...notes, newNote];
@@ -46,6 +50,7 @@ const Notes: React.FC = () => {
         setEditingNote(null);
         setCreatingNewNote(false);
     };
+    
 
     const editNote = (id: number) => {
         const noteToEdit = notes.find((note) => note.id === id);
@@ -90,6 +95,14 @@ const Notes: React.FC = () => {
 
     const filteredNotes = getFilteredNotes();
 
+    const handleNoteClick = (note: any) => {
+        setSelectedNote(note); // Set the selected note to display full content
+    };
+
+    const closeNoteView = () => {
+        setSelectedNote(null); // Close the full note view
+    };
+
     useEffect(() => {
         const savedNotes = localStorage.getItem("notes");
         if (savedNotes) {
@@ -99,7 +112,7 @@ const Notes: React.FC = () => {
 
     return (
         <div
-            className="flex gap-2 lg:gap-4 justify-start"
+            className="flex gap-4 justify-start"
             style={{
                 backgroundImage: `url(${BG})`,
                 backgroundSize: "cover",
@@ -113,8 +126,8 @@ const Notes: React.FC = () => {
             <Sidebar />
 
             {/* Main Content Container */}
-            <div className="flex-1 p-6 lg:p-10 rounded-l-3xl shadow-lg flex flex-col" style={{ backgroundColor: "#F6F6F6", marginLeft: "-10px", overflow: "hidden" }}>
-                <h1 className="text-2xl font-bold mb-1">Notes</h1>
+            <div className="flex-1 p-6 lg:p-10 rounded-l-3xl shadow-lg flex flex-col" style={{ backgroundColor: "#F6F6F6", marginLeft: "-10px" }}>
+                <h1 className="text-2xl font-bold mb-1">MyNotes</h1>
 
                 {/* Sort Buttons */}
                 <div className="flex space-x-2 mb-0 my-3">
@@ -126,23 +139,23 @@ const Notes: React.FC = () => {
 
                 {/* Notes Editor */}
                 {editingNote !== null || creatingNewNote ? (
-                    <div className="bg-white p-6 rounded-lg shadow-lg relative mb-6">
+                    <div className="bg-white p-6 rounded-lg shadow-lg relative mb-4 my-5">
                         <h2 className="text-lg font-semibold">{editingNote ? "Edit Note" : "Create New Note"}</h2>
-                        
-                        {/* Delete Button (Trash Icon) */}
                         {editingNote && (
-                            <button onClick={() => deleteNote(editingNote)} className="absolute top-2 right-2 text-red-500 hover:text-red-700">
-                                <Trash2 size={20} />
+                            <button onClick={() => deleteNote(editingNote)} className="absolute top-5 right-5 text-red-500 hover:text-red-700">
+                                <Trash2 size={25} />
                             </button>
                         )}
-
-                        <input
-                            type="text"
-                            value={currentTitle}
-                            onChange={(e) => setCurrentTitle(e.target.value)}
-                            placeholder="Title"
-                            className="w-full p-2 border-b mb-4 text-lg font-bold"
-                        />
+                        <div className="flex items-center justify-between mb-4">
+                            <input
+                                type="text"
+                                value={currentTitle}
+                                onChange={(e) => setCurrentTitle(e.target.value)}
+                                placeholder="Title"
+                                className="w-full p-2 border-b mb-4 text-lg font-bold"
+                            />
+                            
+                        </div>
                         <ReactQuill value={currentNote} onChange={handleEditorChange} theme="snow" />
                         <div className="mt-4 flex justify-between">
                             <button onClick={cancelEdit} className="px-4 py-2 bg-gray-400 text-white rounded-md hover:bg-gray-500">Cancel</button>
@@ -151,29 +164,48 @@ const Notes: React.FC = () => {
                             </button>
                         </div>
                     </div>
-                ) : (
-                    <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 overflow-auto">
-                        {/* Create New Note */}
-                        <div className="p-4 border rounded-lg cursor-pointer shadow-sm hover:shadow-lg flex items-center justify-center" onClick={() => setCreatingNewNote(true)} style={{ minHeight: "200px", maxWidth: "300px", backgroundColor: "#F9F9F9" }}>
-                            <PlusCircle size={24} className="mr-2" /><span>Create New Note</span>
+                ) : selectedNote ? (
+                    <div className="bg-white p-6 rounded-lg shadow-lg relative mb-4 my-5">
+                        <h2 className="text-lg font-semibold">{selectedNote.title}</h2>
+                        <button onClick={closeNoteView} className="absolute top-3 right-5 text-red-500 hover:text-red-700">Close</button>
+                        <div className="mt-4">
+                            <ReactQuill value={selectedNote.content} readOnly={true} theme="snow" />
                         </div>
+                    </div>
+                ) : (
+                    <div className="mt-6 overflow-x-auto"> {/* Added scroll if content exceeds width */}
+                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+                            <div className="p-6 border rounded-3xl cursor-pointer shadow-lg hover:shadow-xl flex items-center justify-center " onClick={() => setCreatingNewNote(true)} style={{ minHeight: "240px", maxWidth: "320px", backgroundColor: "#F9F9F9" }}>
+                                <PlusCircle size={28} className="mr-2" /><span>Create New Note</span>
+                            </div>
 
-                        {filteredNotes.length === 0 ? (
-                            <p className="text-gray-500">No notes available.</p>
-                        ) : (
-                            filteredNotes.map((note) => (
-                                <div key={note.id} className="p-3 border rounded-lg shadow-sm hover:shadow-lg relative cursor-pointer" style={{ minHeight: "200px", maxWidth: "300px", backgroundColor: note.color }}>
-                                    <button onClick={(e) => { e.stopPropagation(); editNote(note.id); }} className="absolute top-4 right-3 text-black hover:text-[#719191]">
-                                        <FilePen size={25} />
-                                    </button>
-                                    <h3 className="font-bold text-lg mt-2 mb-1">{note.title}</h3>
-                                    <hr className="border-t border-black mb-2"/>
-                                    <p className="text-gray-700">{note.content.slice(0, 10)}...</p>
-                                    <p className="text-sm text-gray-500 absolute bottom-2 left-2">{note.createdDate}</p>
-                                    <p className="text-sm text-gray-500 absolute bottom-2 right-2">{note.createdTime}</p>
-                                </div>
-                            ))
-                        )}
+                            {/* New "Upload File" Container */}
+                            <div className="p-6 border rounded-3xl cursor-pointer shadow-lg hover:shadow-xl flex items-center justify-center" style={{ minHeight: "240px", maxWidth: "320px", backgroundColor: "#F9F9F9" }}>
+                                <Upload size={28} className="mr-2" /><span>Upload File</span>
+                            </div>
+
+                            {filteredNotes.length === 0 ? (
+                                <p className="text-gray-500">No notes available.</p>
+                            ) : (
+                                filteredNotes.map((note) => (
+                                    <div key={note.id} className="p-5 border rounded-3xl shadow-lg hover:shadow-xl relative cursor-pointer" style={{ minHeight: "240px", maxWidth: "320px", backgroundColor: note.color }} onClick={() => handleNoteClick(note)}>
+                                        <h4 className="text-xs text-gray-500">{note.createdDate}</h4>
+                                        <h3 className="font-bold text-lg mt-2 mb-1">{note.title}</h3>
+                                        <hr className="border-t border-black mb-2"/>
+                                        <p className="text-gray-700">{note.content.slice(0, 10)}...</p>
+                                        <p className="text-sm text-gray-500 absolute bottom-2 left-2">{note.createdTime}</p>
+                                        
+                                        {/* Edit Icon */}
+                                        <button 
+                                            onClick={(e) => { e.stopPropagation(); editNote(note.id); }} 
+                                            className="absolute top-10 right-5 text-black hover:text-[#719191]"
+                                        >
+                                            <FilePen size={28} />
+                                        </button>
+                                    </div>
+                                ))
+                            )}
+                        </div>
                     </div>
                 )}
             </div>

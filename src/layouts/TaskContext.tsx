@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 
 interface Task {
+  [x: string]: string;
   name: string;
   dueDateTime: string;
   completed: boolean;
