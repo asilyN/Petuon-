@@ -30,7 +30,7 @@ const Sidebar: React.FC = () => {
                 </Button>
             </Link>
             
-            <Link to="/notes">
+            <Link to="/notes">console.log('Sidebar component rendered');
                 <Button variant="ghost" className="h-20 pl-2">
                     <NotebookPen size={32} color="white" style={{ marginLeft: "-1px" }} />
                 </Button>
