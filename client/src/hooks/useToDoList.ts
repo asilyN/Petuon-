@@ -44,7 +44,7 @@ export const useToDoList = () => {
           const timer = setTimeout(() => {
             setAfterLoading(false);
           return () => clearTimeout(timer);
-        }, 1000) 
+        }, 1200) 
         }
         });
 

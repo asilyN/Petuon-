@@ -1,15 +1,16 @@
-export type Flashcard = {
-  id?: number; 
+export interface Flashcard {
+  id: number;
   question: string;
   answer: string;
-  deck_id?: number; 
-};
+  deck_id: number;
+}
 
-
-export type CreateFlashcardProps = {
+export interface CreateFlashcardProps {
   flashcards: Flashcard[];
   setFlashcards: React.Dispatch<React.SetStateAction<Flashcard[]>>;
-};
+  deckId: number; // Add this to pass the deck ID dynamically
+}
+
 
 // Response for fetching decks from the API
 export type DecksResponse = {
@@ -27,7 +28,7 @@ export type FlashcardsResponse = Flashcard[];
 
 // Structure of a saved deck, including the `id` and `flashcards` it contains
 export type Deck = {
-  id: string;
+  id: number;
   title: string;
   flashcards: Flashcard[];
 };

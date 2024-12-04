@@ -13,7 +13,7 @@ const Avatar = () => {
     return (
         <>
         {/* Top-right section for Bell and Profile */}
-        <div className="fixed top-9 right-12 flex items-center space-x-4">
+        <div className="fixed top-9 right-12 items-center space-x-4 hidden lg:flex">
             {/* Bell Icon */}
             <Bell className="text-[#354F52] h-8 w-8 cursor-pointer" />
             {/* Profile Icon with Dropdown */}
