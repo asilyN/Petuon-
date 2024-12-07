@@ -4,3 +4,4 @@ export type RegisterFormsInputs = {
   user_name: string;
   user_password: string;
 };
+

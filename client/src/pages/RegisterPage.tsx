@@ -67,19 +67,16 @@ const RegisterPage: React.FC = () => {
   
   return (
     <section
-      className="flex h-screen items-center justify-center"
+      className="h-screen flex items-center justify-center"
       style={{
         backgroundImage: `url(${LoginBG})`,
         backgroundSize: "cover",
         backgroundPosition: "center",
       }}
     >
-      <div className="mx-auto mr-20 flex flex-col items-center justify-center px-6 py-8 md:h-screen lg:py-0">
-        <div
-          className="w-full rounded-lg shadow sm:max-w-lg md:mb-20 xl:p-0"
-          style={{ backgroundColor: "rgba(88, 85, 85, 0.285)" }}
-        >
-          <div className="space-y-6 p-10 sm:p-12 md:space-y-8">
+      <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0 mr-20">
+      <div className="w-full rounded-lg shadow md:mb-20 sm:max-w-lg xl:p-0" style={{ backgroundColor: "rgba(88, 85, 85, 0.285)" }}>
+          <div className="p-10 space-y-6 md:space-y-8 sm:p-12">
             <h1 className="text-2xl font-bold leading-tight tracking-tight text-white md:text-3xl dark:text-white">
               Create your account
             </h1>
@@ -90,7 +87,7 @@ const RegisterPage: React.FC = () => {
               <div>
                 <label
                   htmlFor="email"
-                  className="mb-2 block text-sm font-medium text-white dark:text-white"
+                  className="block mb-2 text-sm font-medium text-white dark:text-white"
                 >
                   Email
                 </label>
@@ -108,14 +105,14 @@ const RegisterPage: React.FC = () => {
               <div>
                 <label
                   htmlFor="username"
-                  className="mb-2 block text-sm font-medium text-white dark:text-white"
+                  className="block mb-2 text-sm font-medium text-white dark:text-white"
                 >
                   Username
                 </label>
                 <input
                   type="text"
                   id="username"
-                  className="focus:ring-primary-600 focus:border-primary-600 block w-full rounded-lg bg-[#719191] p-2.5 text-white sm:text-sm"
+                  className="bg-[#719191] text-white sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
                   placeholder="Username"
                   {...register("user_name")}
                 />
@@ -126,7 +123,7 @@ const RegisterPage: React.FC = () => {
               <div>
                 <label
                   htmlFor="password"
-                  className="mb-2 block text-sm font-medium text-white dark:text-white"
+                  className="block mb-2 text-sm font-medium text-white dark:text-white"
                 >
                   Password
                 </label>
@@ -141,20 +138,20 @@ const RegisterPage: React.FC = () => {
                   <p className="text-white">{errors.user_password.message}</p>
                 )}
               </div>
-              <div className="flex items-center justify-center">
+              <div className="flex justify-center items-center">
                 <button
                   type="submit"
-                  className="rounded-3xl bg-[#719191] px-8 py-2 font-bold text-white hover:bg-gray-700"
+                  className="bg-[#719191] hover:bg-gray-700 text-white font-bold py-2 px-8 rounded-3xl"
                 >
                   Sign Up
                 </button>
               </div>
             </form>
-            <div className="mt-4 flex items-center justify-center">
+            <div className="flex justify-center items-center mt-4">
               <p className="text-sm font-light text-white">
                 Already have an account?{" "}
                 <span
-                  className="text-primary-600 cursor-pointer font-medium hover:underline"
+                  className="font-medium text-primary-600 hover:underline cursor-pointer"
                   onClick={() => navigate("/login")}
                 >
                   Log in

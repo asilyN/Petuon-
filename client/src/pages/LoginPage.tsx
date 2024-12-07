@@ -22,14 +22,16 @@ const LoginPage: React.FC<Props> = () => {
           user_name: form.user_name,
           user_password: form.user_password,
         });
-        console.log(response.data.token)
+
         if (response.data.token) {
           // Store JWT token in localStorage for persistent sessions
           localStorage.setItem("token", response.data.token);
           alert("Login successful! Redirecting to dashboard...");
-
           navigate("/dashboard");
-        } 
+        } else {
+          alert("Login successful with Supabase!");
+          navigate("/dashboard");
+        }
     } catch (error: unknown) {
       if (axios.isAxiosError(error)) {
         alert(error.response?.data?.message || "Error connecting to the server.");
@@ -41,7 +43,7 @@ const LoginPage: React.FC<Props> = () => {
 
   return (
     <section
-      className="flex h-screen items-center justify-center"
+      className="h-screen flex items-center justify-center"
       style={{
         backgroundImage: `url(${LoginBG})`,
         backgroundSize: "cover",
@@ -55,7 +57,7 @@ const LoginPage: React.FC<Props> = () => {
         >
           <div className="p-10 space-y-6 md:space-y-8 sm:p-12">
             <h2 className="text-4xl font-bold text-white">Welcome!</h2>
-            <p className="mb-5 text-left font-light text-white">
+            <p className="text-left font-light text-white mb-5">
               Ready to learn smarter? Log in to access your dashboard!
             </p>
             {error && <p className="text-red-500">{error}</p>}
@@ -70,7 +72,7 @@ const LoginPage: React.FC<Props> = () => {
                 <input
                   type="text"
                   id="username"
-                  className="focus:ring-primary-600 focus:border-primary-600 block w-full rounded-lg bg-[#719191] p-2.5 text-white sm:text-sm"
+                  className="bg-[#719191] text-white sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
                   placeholder="Username"
                   {...register("user_name")}
                 />
@@ -89,20 +91,20 @@ const LoginPage: React.FC<Props> = () => {
                 />
                 {errors.user_password && <p className="text-white">{errors.user_password.message}</p>}
               </div>
-              <div className="flex items-center justify-center">
+              <div className="flex justify-center items-center">
                 <button
                   type="submit"
-                  className="justify-center rounded-3xl bg-[#719191] px-8 py-2 font-bold text-white hover:bg-gray-700"
+                  className="bg-[#719191] justify-center hover:bg-gray-700 text-white font-bold py-2 px-8 rounded-3xl"
                 >
                   Log in
                 </button>
               </div>
-              <div className="flex items-center justify-center">
+              <div className="flex justify-center items-center">
                 <p className="text-sm font-light text-white">
                   Don’t have an account yet?{" "}
                   <Link
                     to="/register"
-                    className="text-primary-600 dark:text-primary-500 font-medium hover:underline"
+                    className="font-medium text-primary-600 hover:underline dark:text-primary-500"
                   >
                     Sign up
                   </Link>

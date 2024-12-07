@@ -1,37 +1,26 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
-import {
-  LayoutDashboard,
-  WalletCards,
-  CalendarRange,
-  NotebookPen,
-  ListTodo,
-} from "lucide-react";
+import { LayoutDashboard, WalletCards, CalendarRange, NotebookPen, ListTodo } from "lucide-react";
 import logo from "../assets/petuon_logo.png";
-import background from "../assets/BG.png";
+import background from '../assets/LoginBg.png';
 
 const Sidebar: React.FC = () => {
-  // Ginakuha ang location (kung diin ka na nga page) gamit ang useLocation para sa highlight sa sidebar
-  const location = useLocation();
+    // Ginakuha ang location (kung diin ka na nga page) gamit ang useLocation para sa highlight sa sidebar
+    const location = useLocation(); 
 
-  // Muni nga function nagacheck kung pareho bala ang current nga path sa ginaklik nga link
-  const isActive = (path: string) => {
-    return location.pathname === path; // Kung ang path pareho sa current nga page, nagabalik siya sang true
-  };
+    // Muni nga function nagacheck kung pareho bala ang current nga path sa ginaklik nga link
+    const isActive = (path: string) => {
+        return location.pathname === path;  // Kung ang path pareho sa current nga page, nagabalik siya sang true
+    };
 
   return (
     <div>
       {/* Desktop Sidebar */}
-      <div
-        className="fixed bottom-0 hidden h-screen w-screen flex-col bg-cover bg-center bg-no-repeat lg:flex"
-        style={{ backgroundImage: `url(${background})` }}
-      >
-        <img
-          src={logo}
-          className="fixed left-[0.1rem] top-[1rem] size-[8rem]"
-          alt="Logo"
-        />
-        <div className="fixed left-4 top-[11rem] flex flex-col items-start space-y-5">
+      <div 
+        className="hidden lg:flex flex-col h-screen w-screen bg-cover bg-center bg-no-repeat bottom-0 fixed"
+        style={{ backgroundImage: `url(${background})` }}>
+        <img src={logo} className="fixed left-[0.1rem] top-[1rem] size-[8rem]" alt="Logo" />
+        <div className="flex flex-col items-start space-y-5 fixed top-[11rem] left-4">
           <Link
             to="/dashboard"
             className={`group pl-9 pr-16 pt-[1.2rem] pb-[1.2rem] rounded-tl-3xl rounded-bl-3xl hover:bg-[#F6F6F6] transition-colors duration-300 ${isActive("/dashboard") ? "bg-[#F6F6F6]" : ""}`}>
@@ -40,7 +29,7 @@ const Sidebar: React.FC = () => {
           <Link
             to="/flashcard"
             className={`group pl-9 pr-11 pt-[1.2rem] pb-[1.2rem] rounded-tl-3xl rounded-bl-3xl hover:bg-[#F6F6F6] transition-colors duration-300 ${isActive("/flashcard") ? "bg-[#F6F6F6]" : ""}`}>
-            <WalletCards size={32} className={`group-hover:text-[#719191] duration-300 ${isActive("/flashcard") ? "text-[#719191] scale-150" : "text-white transform transition-transform duration-200 hover:scale-125 active:scale-50"}`} />
+            <WalletCards size={32} className={`group-hover:text-[#719191] duration-300 ${isActive("flashcard") ? "text-[#719191] scale-150" : "text-white transform transition-transform duration-200 hover:scale-125 active:scale-50"}`} />
           </Link>
           <Link
             to="/notepad"
@@ -62,9 +51,8 @@ const Sidebar: React.FC = () => {
 
       {/* Mobile Bottom Navigation */}
       <div
-        className="fixed bottom-0 left-0 z-10 flex h-20 w-full items-center justify-around rounded-t-3xl bg-[#354F52] py-2 shadow-md md:px-8 lg:hidden"
-        style={{ backgroundImage: `url(${background})` }}
-      >
+        className="lg:hidden fixed bottom-0 left-0 w-full bg-[#354F52] flex justify-around items-center py-2 shadow-md rounded-t-3xl h-20 z-10 md:px-8"
+        style={{ backgroundImage: `url(${background})` }}>
         <Link
           to="/dashboard"
           className={`flex flex-col items-center text-sm ${isActive("/dashboard") ? "text-primary-700" : "text-white"}`}>

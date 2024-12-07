@@ -20,54 +20,43 @@ const Clock: React.FC = () => {
   const seconds = time.getSeconds().toString().padStart(2, "0");
 
   return (
-    <div className="ml-[54rem] mt-[-4em] flex">
-      <div
-        style={{ fontFamily: '"Crimson Pro", serif' }}
-        className="mt-[1rem] flex items-center rounded-lg px-8 py-4 text-[#354F52]"
-      >
+    <div className="flex ml-[54rem] mt-[-4em] ">
+      <div style={{ fontFamily: '"Crimson Pro", serif' }} className="mt-[1rem] flex items-center text-[#354F52]  py-4 px-8 rounded-lg">
         {/* Day */}
-        <div className="mx-4 text-center">
-          <div className="text-4xl">{day}</div>
-          <div className="mt-1 text-sm uppercase">Day</div>
+        <div className="text-center mx-4">
+          <div className="text-4xl ">{day}</div>
+          <div className="text-sm uppercase mt-1 ">Day</div>
         </div>
 
         {/* Divider */}
-        <div
-          className="mx-4 h-12 w-0.5 bg-white"
-          style={{ backgroundColor: "#354F52" }}
-        ></div>
+        <div className="w-0.5 bg-white h-12 mx-4" style={{ backgroundColor: "#354F52" }}></div>
 
         {/* Hours */}
-        <div className="mx-4 text-center">
-          <div className="text-4xl">{hours}</div>
-          <div className="mt-1 text-sm uppercase">Hours</div>
+        <div className="text-center mx-4">
+          <div className="text-4xl ">{hours}</div>
+          <div className="text-sm uppercase mt-1">Hours</div>
         </div>
 
         {/* Divider */}
-        <div
-          className="mx-4 h-12 w-0.5"
-          style={{ backgroundColor: "#354F52" }}
-        ></div>
+        <div className="w-0.5 h-12 mx-4" style={{ backgroundColor: "#354F52" }}></div>
 
         {/* Minutes */}
-        <div className="mx-4 text-center">
-          <div className="text-4xl">{minutes}</div>
-          <div className="mt-1 text-sm uppercase">Minutes</div>
+        <div className="text-center mx-4">
+          <div className="text-4xl ">{minutes}</div>
+          <div className="text-sm uppercase mt-1">Minutes</div>
         </div>
 
         {/* Divider */}
-        <div
-          className="mx-4 h-12 w-0.5 bg-white"
-          style={{ backgroundColor: "#354F52" }}
-        ></div>
+        <div className="w-0.5 bg-white h-12 mx-4" style={{ backgroundColor: "#354F52" }} ></div>
 
         {/* Seconds */}
-        <div className="mx-4 text-center">
-          <div className="text-4xl">{seconds}</div>
-          <div className="mt-1 text-sm uppercase">Seconds</div>
+        <div className="text-center mx-4">
+          <div className="text-4xl ">{seconds}</div>
+          <div className="text-sm uppercase mt-1">Seconds</div>
         </div>
       </div>
     </div>
+    
   );
 };
 

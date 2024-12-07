@@ -31,7 +31,6 @@ const DashboardPage = () => {
           </div>
           <div
             style={{ fontFamily: '"Signika Negative", sans-serif' }}
-
             className="font-bold text-[#354F52] p-3 fixed bg-white w-[35rem] h-[14rem] top-[29rem] left-[9.8rem] rounded-[1.5rem] text-xl shadow-lg"
           >
             Progress
