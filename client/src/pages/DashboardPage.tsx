@@ -37,6 +37,7 @@ const DashboardPage = () => {
             Progress
           </div>
           <div
+            onClick={() => console.log("pet data: ", petData)}
             style={{ fontFamily: '"Signika Negative", sans-serif' }}
             className="font-bold text-[#354F52] fixed bg-white w-[45.5rem] h-[37rem] left-[47.5rem] rounded-[1.5rem] top-[6rem] text-xl shadow-lg"
           >

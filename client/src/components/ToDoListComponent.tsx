@@ -916,7 +916,7 @@ const ToDoListComponent: React.FC<ToDoListProps> = ({
               <button
                 style={{ fontFamily: '"Signika Negative", sans-serif' }}
                 className="fixed top-[25rem] w-[35rem] rounded-bl-[1.5rem] rounded-br-[1.5rem] bg-[#354F52] py-2 text-white hover:bg-[#52796f]"
-                onClick={() => navigate(`/ToDoList`)}
+                onClick={() => navigate(`/todolist`)}
               >
                 {filterTasks.length === 0
                   ? "Add a Task"
