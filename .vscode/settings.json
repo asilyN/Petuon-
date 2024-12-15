@@ -20,8 +20,5 @@
   ],
   "[typescript]": {
     "editor.defaultFormatter": "denoland.vscode-deno"
-  },
-  "files.watcherExclude": {
-    "**/target": true
   }
 }

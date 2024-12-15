@@ -1,127 +1,68 @@
-import { useState, useEffect } from "react";
-import { usePets } from "../../hooks/usePets"; // Import your custom hook for fetching pets
+import { useState } from "react";
 import PetSelectionModal from "./PetSelectionModal";
-import CareMessageModal from "./CareMessageModal"; // Import the CareMessageModal component
-import CinematicEvolutionModal from "./CinematicEvolutionModal"; // Import the new modal component
-import axios from "axios";
 
-const token = localStorage.getItem("token");
 
 interface PetsProps {
+  petData: any;
   onPetAdded: (pet: any) => void;
-  onPetUpdated: (updatedPet: any) => void;
+  onPetUpdated: (updatedPet: any) => void; // Add a function to update pet data
 }
 
-const Pets: React.FC<PetsProps> = ({ onPetAdded, onPetUpdated }) => {
+const Pets: React.FC<PetsProps> = ({ petData, onPetAdded, onPetUpdated }) => {
   const [showModal, setShowModal] = useState(false);
-  const [showCareMessageModal, setShowCareMessageModal] = useState(false);
-  const [showEvolutionCinematic, setShowEvolutionCinematic] = useState(false); // New state for evolution cinematic
-  const [tempGif, setTempGif] = useState<string | null>(null); // State for temporary GIF display
-  const [isFeeding, setIsFeeding] = useState(false); // State for button cooldown
-  const { pets, loading, error, fetchPets, setPets } = usePets();
-
-  useEffect(() => {
-    fetchPets();
-  }, []);
+  const [showCongratulatoryMessage, setShowCongratulatoryMessage] = useState("");
 
   const handleClaimPet = () => {
     setShowModal(true);
   };
 
-  const handleFeedPet = async (petData: any) => {
-    if (isFeeding) {
-      return; // Prevent feeding if cooldown is active
-    }
-
+  const handleFeedPet = () => {
     if (petData.pet_currency >= 100) {
-      setIsFeeding(true); // Start cooldown
-
-      const updatedPet = { ...petData };
-
-      if (updatedPet.pet_evolution_rank >= 4) {
+      const updatedPet = { ...petData }; // Change 'let' to 'const'
+  
+      // Check if the pet has reached the max evolution rank
+      if (updatedPet.pet_evolution_rank >= 3) {
         alert("Your pet has reached its final evolution rank! It cannot be fed anymore.");
-        setIsFeeding(false); // Reset cooldown
         return;
       }
-
-      if (updatedPet.pet_evolution_rank > 1) {
-        // Display eating GIF
-        const eatingGif = `src/assets/pets/${updatedPet.pet_type}/evolution_${updatedPet.pet_evolution_rank}_eating.gif`;
-        setTempGif(eatingGif);
-
-        setTimeout(() => {
-          setTempGif(null);
-        }, 2000); // Reset to original GIF after 2 seconds
-      }
-
+  
+      // If the progress bar has reached 100, trigger evolution and reset
       if (updatedPet.pet_progress_bar >= 100) {
-        updatedPet.pet_progress_bar = 0;
-        updatedPet.pet_evolution_rank += 1; // Update evolution rank here
-        updatedPet.pet_max_value =
-          updatedPet.pet_evolution_rank === 4
-            ? 250
-            : updatedPet.pet_evolution_rank === 3
-            ? 200
-            : 150;
-
-        setShowEvolutionCinematic(true); // Trigger evolution cinematic
-      } else {
-        updatedPet.pet_currency -= 100;
-        updatedPet.pet_progress_bar = Math.min(updatedPet.pet_progress_bar + 10, 100);
-      }
-
-      try {
-        await axios.patch(
-          `http://localhost:3002/pets/updatePet/${updatedPet.pet_id}`,
-          {
-            pet_currency: updatedPet.pet_currency,
-            pet_progress_bar: updatedPet.pet_progress_bar,
-            pet_evolution_rank: updatedPet.pet_evolution_rank,
-            updated_date: new Date(),
-          },
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-
-        setPets((prevPets) =>
-          prevPets.map((pet) => (pet.pet_id === updatedPet.pet_id ? updatedPet : pet))
-        );
-
-        onPetUpdated(updatedPet);
-      } catch (error) {
-        console.error("Error updating pet data:", error);
-      } finally {
+        updatedPet.pet_progress_bar = 0; // Reset the progress bar
+  
+        // Increase the evolution rank and adjust max value
+        updatedPet.pet_evolution_rank += 1;
+  
+        if (updatedPet.pet_evolution_rank === 3) {
+          updatedPet.pet_max_value = Math.min(updatedPet.pet_max_value + 100, 200); // Cap max value at 200 for final evolution
+          setShowCongratulatoryMessage("Congratulations! Your pet has reached its final evolution!");
+        } else {
+          updatedPet.pet_max_value = Math.min(updatedPet.pet_max_value + 50, 150); // Increase max value after the first evolution
+          setShowCongratulatoryMessage("Congratulations! Your pet has evolved!");
+        }
+  
         setTimeout(() => {
-          setIsFeeding(false); // End cooldown after 2 seconds
-        }, 1000);
+          setShowCongratulatoryMessage(""); // Hide the message after a short delay
+        }, 3000); // Message will disappear after 3 seconds
+      } else {
+        updatedPet.pet_currency -= 100; // Deduct 100 currency
+        updatedPet.pet_progress_bar = Math.min(updatedPet.pet_progress_bar + 10, 100); // Add 10 progress, but max it out at 100
       }
+  
+      onPetUpdated(updatedPet); // Update pet data with new progress and currency
     } else {
       alert("Not enough currency to feed the pet.");
     }
   };
+  
 
-  const getEvolutionGif = (petType: string, evolutionRank: number): string => {
-    if (tempGif) {
-      return tempGif;
-    }
-    if (evolutionRank === 1) {
-      return `src/assets/pets/${petType}/evolution_1.png`;
-    }
-    return `src/assets/pets/${petType}/evolution_${evolutionRank}.gif`;
+  const handleAddCash = () => {
+    const updatedPet = {
+      ...petData,
+      pet_currency: petData.pet_currency + 500, // Add 500 currency
+    };
+    onPetUpdated(updatedPet); // Update pet data with added currency
   };
-
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
-  if (error) {
-    return <div>Error: {error}</div>;
-  }
-
-  const petData = pets.length > 0 ? pets[0] : null;
 
   return (
     <div className="bg-primary-300 w-full h-full rounded-xl flex flex-col bg-cover bg-center">
@@ -138,7 +79,7 @@ const Pets: React.FC<PetsProps> = ({ onPetAdded, onPetUpdated }) => {
           </div>
           <div className="flex flex-col items-center">
             <img
-              src={getEvolutionGif(petData.pet_type, petData.pet_evolution_rank)}
+              src={`src/assets/${petData.pet_type}_final.gif`} // Example image
               alt="Pet"
               className="w-10 h-64 md:w-96 md:h-96 object-contain transition-all duration-500"
             />
@@ -151,20 +92,35 @@ const Pets: React.FC<PetsProps> = ({ onPetAdded, onPetUpdated }) => {
               />
             </div>
             <div className="w-full md:w-96">
-              <h2 className="font-semibold text-sm mb-1 text-[#354F52]">Pet Info</h2>
+              <h2 className="font-semibold text-sm mb-1 text-[#354F52]">
+                Pet Info
+              </h2>
               <p className="text-sm text-[#354F52]">{petData.pet_type}</p>
               <p className="text-sm text-[#354F52]">Evolution Rank: {petData.pet_evolution_rank}</p>
             </div>
           </div>
+          {/* Feed and Add Cash buttons */}
           <div className="flex justify-center space-x-4 mt-4">
             <button
-              className={`bg-green-500 w-40 h-8 text-white rounded-xl ${isFeeding ? "opacity-50 cursor-not-allowed" : ""}`}
-              onClick={() => handleFeedPet(petData)}
-              disabled={isFeeding} // Disable button during cooldown
+              className="bg-green-500 w-40 h-8 text-white rounded-xl"
+              onClick={handleFeedPet}
             >
               Feed Pet
             </button>
+            <button
+              className="bg-blue-500 w-40 h-8 text-white rounded-xl"
+              onClick={handleAddCash}
+            >
+              Add Cash
+            </button>
           </div>
+
+          {/* Congratulatory Message */}
+          {showCongratulatoryMessage && (
+            <div className="mt-4 text-center text-xl font-bold text-green-500">
+              {showCongratulatoryMessage}
+            </div>
+          )}
         </>
       ) : (
         <button
@@ -176,30 +132,7 @@ const Pets: React.FC<PetsProps> = ({ onPetAdded, onPetUpdated }) => {
       )}
 
       {showModal && (
-        <PetSelectionModal
-          onClose={() => setShowModal(false)}
-          onPetAdded={(pet) => {
-            setPets([pet]);
-            onPetAdded(pet);
-            setShowCareMessageModal(true);
-          }}
-        />
-      )}
-
-      {showCareMessageModal && (
-        <CareMessageModal
-          onClose={() => {
-            setShowCareMessageModal(false);
-            window.location.reload();
-          }}
-        />
-      )}
-
-      {showEvolutionCinematic && petData && (
-        <CinematicEvolutionModal
-          pet={petData}
-          onClose={() => setShowEvolutionCinematic(false)}
-        />
+        <PetSelectionModal onClose={() => setShowModal(false)} onPetAdded={onPetAdded} />
       )}
     </div>
   );

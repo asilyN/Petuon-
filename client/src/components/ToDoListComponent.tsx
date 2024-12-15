@@ -799,24 +799,14 @@ const ToDoListComponent: React.FC<ToDoListProps> = ({
               >
                 Fetching tasks...
               </h1>
-             
-            </> 
-          ) : 
-            filterTasks.length === 0 && (
-              <>
-                <img
-                  src="src\assets\sleeping_penguin2.gif"
-                  alt="No tasks available"
-                  className="mx-auto mt-[2rem] h-[10rem] w-[10rem]"
-                />
-                <div
-                  style={{ fontFamily: '"Signika Negative", sans-serif' }}
-                  className="mt-[-1rem] text-center text-lg text-gray-500"
-                >
-                  No more tasks
-                </div>
-              </>
-            )}
+              <button
+                style={{ fontFamily: '"Signika Negative", sans-serif' }}
+                className="fixed top-[25rem] w-[35rem] rounded-bl-[1.5rem] rounded-br-[1.5rem] bg-[#354F52] py-2 text-white hover:bg-[#52796f]"
+              >
+                Searching Tasks...
+              </button>
+            </>
+          ) : (
             <>
               <ul>
                 {tasks
@@ -906,26 +896,36 @@ const ToDoListComponent: React.FC<ToDoListProps> = ({
                       : `${filterTasks.length} more tasks left`}
                   </div>
                 </>
-              ): null}
-              
+              ) : (
+                filterTasks.length === 0 && (
+                  <>
+                    <img
+                      src="src\assets\sleeping_penguin2.gif"
+                      alt="No tasks available"
+                      className="mx-auto mt-[2rem] h-[10rem] w-[10rem]"
+                    />
+                    <div
+                      style={{ fontFamily: '"Signika Negative", sans-serif' }}
+                      className="mt-[-1rem] text-center text-lg text-gray-500"
+                    >
+                      No more tasks
+                    </div>
+                  </>
+                )
+              )}
               <button
                 style={{ fontFamily: '"Signika Negative", sans-serif' }}
                 className="fixed top-[25rem] w-[35rem] rounded-bl-[1.5rem] rounded-br-[1.5rem] bg-[#354F52] py-2 text-white hover:bg-[#52796f]"
                 onClick={() => navigate(`/ToDoList`)}
               >
-                  {loading ? (
-                  <span>Searching Tasks...</span>
-                  ) : (
-                    <>
-                      {filterTasks.length === 0
-                        ? "Add a Task"
-                        : filterTasks.length > 5
-                        ? `View ${filterTasks.length - 5} more`
-                        : "Add more tasks"}
-                    </>
-                  )}
+                {filterTasks.length === 0
+                  ? "Add a Task"
+                  : filterTasks.length > 5
+                    ? `View ${filterTasks.length - 5} more`
+                    : "Add more tasks"}
               </button>
             </>
+          )}
         </div>
       </>
     );

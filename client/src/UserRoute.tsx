@@ -7,7 +7,6 @@ interface UserRouteProps {
 }
 
 const UserRoute: React.FC<UserRouteProps> = ({ children }) => {
-
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
   const { token, fetchTokenFromDatabase } = useToken();
 
@@ -36,7 +35,6 @@ const UserRoute: React.FC<UserRouteProps> = ({ children }) => {
 
   // If authenticated, render children (protected routes), else redirect to login
   return isAuthenticated ? <>{children}</> : <Navigate to="/login" replace />;
-
 };
 
 export default UserRoute;
