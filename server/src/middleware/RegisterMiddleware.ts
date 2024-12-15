@@ -30,6 +30,6 @@ export const ValidateRegister =  async (req: Request, res: Response, next: NextF
         next();
      } catch (error) {
          console.error('Error checking for tasks:', error);
-         res.status(500).json({ message: 'Internal server error' });
+        res.status(500).json({ message: 'Internal server error' });
      }
  }

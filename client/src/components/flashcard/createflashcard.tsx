@@ -1,14 +1,15 @@
-import React, { useState } from 'react';
-import { Flashcard, CreateFlashcardProps } from "../../types/FlashCardTypes";
+import React, { useState,} from 'react';
+import { Flashcard, CreateFlashcardProps} from "../../types/FlashCardTypes";
 import { ListPlus } from 'lucide-react';
 import axios from "axios";
 import { v4 as uuidv4 } from 'uuid';
-
-
+import { toast } from 'react-toastify';
+ 
 export const CreateFlashcard: React.FC<CreateFlashcardProps> = ({ flashcards, setFlashcards, flashCardId }) => {
   const [question, setQuestion] = useState<string>("");
   const [answer, setAnswer] = useState<string>("");
   const flashcard_id = flashCardId;
+  
 
   const handleQuestionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setQuestion(event.target.value);
@@ -18,76 +19,79 @@ export const CreateFlashcard: React.FC<CreateFlashcardProps> = ({ flashcards, se
     setAnswer(event.target.value);
   };
 
-  const createFlashcard = async () => {
+  const createFlashcard = async() => {
     if (question && answer) {
       const unique_flashcard_id = uuidv4();
-      const newFlashcard: Flashcard = {
-        question, answer, flashcard_id, unique_flashcard_id,
-        progress: false
-      };
+      const newFlashcard: Flashcard = { question, answer, flashcard_id, unique_flashcard_id};
       const updatedFlashcards = [...flashcards, newFlashcard];
       setFlashcards(updatedFlashcards);
       console.log(`question: ${question}, answer: ${answer}, flashcardid: ${flashcard_id}, uniqueId: ${unique_flashcard_id}`);
       try {
         const flashcardData: Flashcard = {
-          question, answer, flashcard_id, unique_flashcard_id,
-          progress: false
-        };
-        const response = await axios.post('http://localhost:3002/cards/insertCard', flashcardData);
+          question, answer, flashcard_id, unique_flashcard_id
+        };  
+        const response = await axios.post('http://localhost:3002/cards/insertCard', 
+          flashcardData
+        );
         console.log(`Flashcard created: id: ${flashcard_id}, uniqueId: ${unique_flashcard_id}`, response);
-      } catch (error) {
+        toast.success('Flashcard created!');
+      }
+      catch (error) {
         console.error('Error creating flashcard:', error);
       }
       setQuestion('');
       setAnswer('');
     } else {
-      alert('Please enter a question and answer');
+      if (!question) {
+        toast.warn('Please enter a question');
+      }
+      if (!answer) {
+        toast.warn('Please enter an answer');
+      }
     }
   };
 
-  // Function to delete a flashcard
-
   return (
-    <div className="flex flex-col md:flex-row items-center justify-center p-8 mt-[-6rem]">
-      <div className="w-full max-w-4xl p-6   rounded-xl  space-y-6 ">
-        {/* Title */}
-        <h2 style={{ fontFamily: '"Signika Negative", sans-serif' }} className="text-3xl font-semibold text-[#354F52]">Create a New Set</h2>
-
-        {/* Question and Answer Inputs */}
-        <div className="space-y-4">
-          <div className="flex flex-col">
-            <label style={{ fontFamily: '"Signika Negative", sans-serif' }} className="text-lg font-medium text-[#354F52]">Question</label>
-            <input
-              type="text"
-              value={question}
-              onChange={handleQuestionChange}
-              className="mt-2 p-4 rounded-lg border-2 border-[#ccc] focus:ring-2 focus:ring-[#52796F] focus:border-transparent bg-[#f0f4f1] placeholder-[#9b9b9b] text-[#354F52] transition-transform duration-200 hover:scale-105"
-              placeholder="Enter your question"
-            />
-          </div>
-          <div className="flex flex-col">
-            <label style={{ fontFamily: '"Signika Negative", sans-serif' }} className="text-lg font-medium text-[#354F52]">Answer</label>
-            <input
-              type="text"
-              value={answer}
-              onChange={handleAnswerChange}
-              className="mt-2 p-4 rounded-lg border-2 border-[#ccc] focus:ring-2 focus:ring-[#52796F] focus:border-transparent bg-[#f0f4f1] placeholder-[#9b9b9b] text-[#354F52] transition-transform duration-200 hover:scale-105"
-              placeholder="Enter the answer"
-            />
-          </div>
-        </div>
-
-        {/* Add Flashcard Button */}
-        <div className="flex items-center justify-between">
-          <button
-            onClick={createFlashcard}
-            className="bg-[#52796F] text-white font-semibold py-2 px-4 rounded-lg shadow-lg flex items-center hover:bg-[#354F52] transition-transform duration-100 hover:scale-105 "
-          >
-            <ListPlus className="w-5 h-5 mr-2" />
-            Add Flashcard
-          </button>
-        </div>
-      </div>
-    </div>
+    <div className="mt-[-2rem] flex flex-col md:flex-row justify-center items-center gap-10 p-4 ">
+        <input
+        type="text"
+        value={question}
+        onChange={handleQuestionChange}
+        onKeyPress={(event) => {
+        if (event.key === 'Enter') {
+          if (question) {
+            toast.warn('Please enter an answer');
+            event.preventDefault();
+            document.getElementById('answerInput')?.focus();
+          } else {
+            toast.warn('Please enter a question');
+          }
+        }
+        }}
+        style={{ fontFamily: '"Signika Negative", sans-serif' }} 
+        className="h-16 rounded-3xl w-full md:w-1/3 p-5 shadow-xl border-2 border-[#52796F] focus:outline-none focus:ring-2 focus:ring-[#52796F] focus:border-transparent placeholder-gray-300 text-white bg-[#657F83] transform transition-transform duration-200 hover:scale-105 focus:scale-105"
+        placeholder="Insert question"
+        />
+        <input
+        id="answerInput"
+        type="text"
+        value={answer}
+        onChange={handleAnswerChange}
+        onKeyPress={(event) => {
+        if (event.key === 'Enter') {
+          createFlashcard();
+        }
+        }}
+        style={{ fontFamily: '"Signika Negative", sans-serif' }}
+        className="h-16 rounded-3xl w-full md:w-1/3 p-5 shadow-xl border-2 border-[#52796F] focus:outline-none focus:ring-2 focus:ring-[#52796F] focus:border-transparent placeholder-gray-300 text-white bg-[#657F83] transform transition-transform duration-200 hover:scale-105 focus:scale-105"
+        placeholder="Insert answer"
+        />
+        <button
+        onClick={createFlashcard}
+        className="bg-[#657F83] text-white font-semibold h-16 w-16 shadow-xl rounded-full hover:bg-[#52796F] transition duration-200 shadow-md hover:shadow-lg flex items-center justify-center transform hover:scale-110"
+        >
+        <ListPlus className="w-10 h-10 ml-2" />
+        </button>
+  </div>
   );
 };

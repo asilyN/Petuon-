@@ -27,8 +27,7 @@ export const useToDoList = () => {
         throw new Error('No token found');
       }
       console.log(token)
-      const response = await axios.get("http://localhost:3002/tasks/getTask",  
-      {
+      const response = await axios.get("http://localhost:3002/tasks/getTask",  {
         headers: {
           Authorization: `Bearer ${token}`
         }
@@ -51,11 +50,10 @@ export const useToDoList = () => {
         }),
       );
       const response1 = await axios.get(
-        "http://localhost:3002/tasks/getCompleteTask",
-      {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
+        "http://localhost:3002/tasks/getCompleteTask",{
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
       });
       const taskData1 = response1.data.map(
         (task: {
@@ -120,13 +118,11 @@ export const useToDoList = () => {
 
       setTasksBackup([...tasks, newTask]);
 
-      await axios.post("http://localhost:3002/tasks/insertTask", newTask, 
-      {
+      await axios.post("http://localhost:3002/tasks/insertTask", newTask, {
         headers: {
           Authorization: `Bearer ${token}` // Include the token for authentication
         }
       }); 
-
     } catch (error) {
       console.error("Error adding task:", error);
     }

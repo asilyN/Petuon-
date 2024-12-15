@@ -1,11 +1,9 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useState } from "react";
 import ReactQuill from "react-quill";
 import { FilePen, Trash2, FilePlus } from "lucide-react";
 import axios from "axios";
 import { v4 as uuidv4 } from "uuid";
 import { useNotepad } from "../hooks/useNotepad";
-import { motion } from "framer-motion";
-import parse from 'html-react-parser';
 
 const NotepadComponent: React.FC = () => {
     const [currentTitle, setCurrentTitle] = useState<string>("");
@@ -15,40 +13,30 @@ const NotepadComponent: React.FC = () => {
     const [filter, setFilter] = useState<string>("All");
     const [selectedNote, setSelectedNote] = useState<any | null>(null);
 
-    const {notes, addNote, saveNOte, deleteNOte, loading, afterLoading, setNotes} = useNotepad();
-  
-    
-    
+    const {notes, addNote, saveNOte, deleteNOte} = useNotepad();
 
+  
     const getRandomPastelColor = () => {
         const colors = ["#FE9B72", "#FFC973", "#E5EE91", "#B692FE"];
         return colors[Math.floor(Math.random() * colors.length)];
     };
 
-      const updateTasks = useCallback(() => {
-        setNotes((prevNote) =>
-          prevNote.map((note) => {
-            return note;
-          }),
-        );
-      }, []);
-    
-      useEffect(() => {
-        const interval = setInterval(updateTasks, 1000);
-    
-        return () => clearInterval(interval);
-      }, [updateTasks]);
+  
     // Save or update note
     const saveNote = async () => {
       if (currentTitle.trim() === "" || currentNote.trim() === "") {
         console.error("Title or content is empty.");
         return;
       }
-  
+    
+      const strippedNoteContent = currentNote
+        .replace(/<\/?(h1|h2|h3|p|br)>/g, "")
+        .trim();
+    
       const newNote = {
         note_id: uuidv4(),
         title: currentTitle.trim(),
-        content: currentNote,
+        content: strippedNoteContent,
         color: getRandomPastelColor(),
         created_date: new Date().toISOString().split("T")[0], // '2024-12-01'
         created_time: new Date().toLocaleTimeString([], {
@@ -85,9 +73,6 @@ const NotepadComponent: React.FC = () => {
       }
     };
 
-
-    // Automatically scroll to the right when the notes change
-
     // Handle editing
     const editNote = (note_id: string) => {
         const noteToEdit = notes.find((note) => note.note_id === note_id); // Find the note to edit\
@@ -105,7 +90,7 @@ const NotepadComponent: React.FC = () => {
         try {
         await deleteNOte(note_id)
         setEditingNote(null)
-        resetForm()
+
         } catch (error) {
         console.error("Error deleting note:", error);
         }
@@ -170,265 +155,220 @@ const NotepadComponent: React.FC = () => {
     };
 
     const filteredNotes = getFilteredNotes();
-    
-    const taskVariants = {
-      hidden: { opacity: 0, y: 0 }, // Initial state: invisible and above
-      visible: { opacity: 1, y: 0 }, // Final state: visible and at the correct position
-    };
-    const staggerTime = 1; // Total duration for all tasks to be rendered (in seconds)
-    const delayPerItem = staggerTime / filteredNotes.length; // Time delay per task
 
-    const formatContent = (content: string) => {
-      // If content is an object, convert it to a string or access the correct property
-      console.log(content)
-      if (typeof content === 'object') {
-        content = JSON.stringify(content); // or access a specific property like content.text
-      }
-
-      const strippedContent = content.replace(/<a [^>]*>(.*?)<\/a>/g, '$1');
-
-      return parse(strippedContent); // Safely parse HTML content
-    };
-    
 
     return (
-      <>
-      <h1
-        style={{ fontFamily: '"Crimson Pro", serif' }}
-        className="ftracking-normal mb-4 mt-7 text-[3rem] text-[#354F52]"
-      >
-        {" "}
-        My Notes
-      </h1>
+        <>
+          <h1
+          style={{ fontFamily: '"Crimson Pro", serif' }}
+          className="ftracking-normal mb-4 mt-7 text-[3rem] text-[#354F52]"
+        >
+          {" "}
+          My Notes
+        </h1>
 
-      {/* Filter Buttons */}
-      {editingNote === null && !creatingNewNote && selectedNote === null && (
-        <div className="my-3 mb-0 mt-[-15px] flex space-x-2 font-serif font-bold text-[#354F52]">
-          <button
-            onClick={() => setFilter("All")}
-            className={`rounded-md px-4 py-2 ${filter === "All" ? "bg-[#657F83] font-serif font-bold text-white" : "bg-none"} hover:scale-110`}
-          >
-            All
-          </button>
-          <button
-            onClick={() => setFilter("Today")}
-            className={`rounded-md px-4 py-2 ${filter === "Today" ? "bg-[#657F83] font-serif font-bold text-white" : "bg-none"} hover:scale-110`}
-          >
-            Today
-          </button>
-          <button
-            onClick={() => setFilter("Yesterday")}
-            className={`rounded-md px-4 py-2 ${filter === "Yesterday" ? "bg-[#657F83] font-serif font-bold text-white" : "bg-none"} hover:scale-110`}
-          >
-            Yesterday
-          </button>
-          <button
-            onClick={() => setFilter("This Week")}
-            className={`rounded-md px-4 py-2 ${filter === "This Week" ? "bg-[#657F83] font-serif font-bold text-white" : "bg-none"} hover:scale-110`}
-          >
-            This Week
-          </button>
-          <button
-            onClick={() => setFilter("This Month")}
-            className={`rounded-md px-4 py-2 ${filter === "This Month" ? "bg-[#657F83] font-serif font-bold text-white" : "bg-none"} hover:scale-110`}
-          >
-            This Month
-          </button>
-        </div>
-      )}
+        {/* Filter Buttons */}
+        {editingNote === null && !creatingNewNote && selectedNote === null && (
+          <div className="my-3 mb-0 mt-[-15px] flex space-x-2 font-serif font-bold text-[#354F52]">
+            <button
+              onClick={() => setFilter("All")}
+              className={`rounded-md px-4 py-2 ${filter === "All" ? "bg-[#657F83] font-serif font-bold text-white" : "bg-none"} hover:scale-110`}
+            >
+              All
+            </button>
+            <button
+              onClick={() => setFilter("Today")}
+              className={`rounded-md px-4 py-2 ${filter === "Today" ? "bg-[#657F83] font-serif font-bold text-white" : "bg-none"} hover:scale-110`}
+            >
+              Today
+            </button>
+            <button
+              onClick={() => setFilter("Yesterday")}
+              className={`rounded-md px-4 py-2 ${filter === "Yesterday" ? "bg-[#657F83] font-serif font-bold text-white" : "bg-none"} hover:scale-110`}
+            >
+              Yesterday
+            </button>
+            <button
+              onClick={() => setFilter("This Week")}
+              className={`rounded-md px-4 py-2 ${filter === "This Week" ? "bg-[#657F83] font-serif font-bold text-white" : "bg-none"} hover:scale-110`}
+            >
+              This Week
+            </button>
+            <button
+              onClick={() => setFilter("This Month")}
+              className={`rounded-md px-4 py-2 ${filter === "This Month" ? "bg-[#657F83] font-serif font-bold text-white" : "bg-none"} hover:scale-110`}
+            >
+              This Month
+            </button>
+          </div>
+        )}
 
-      {/* Notes Editor or Full Note View */}
-      {editingNote !== null || creatingNewNote ? (
-        <div className="relative my-5 mb-4 max-h-[36rem] w-full overflow-y-auto rounded-lg bg-white p-6 shadow-lg md:w-[84rem]">
-          <h2 className="text-lg font-semibold">
-            {editingNote ? "Edit Note" : "Create New Note"}
-          </h2>
-          {editingNote && (
-            <button
-              onClick={() => deleteNote(editingNote)}
-              className="absolute right-5 top-5 text-red-500 hover:text-red-700"
-            >
-              <Trash2 size={25} />
-            </button>
-          )}
-          <div className="mb-4 flex items-center justify-between">
-            <input
-              type="text"
-              value={currentTitle}
-              onChange={(e) => setCurrentTitle(e.target.value)}
-              placeholder="Title"
-              className="mb-4 w-full border-b p-2 text-lg font-bold"
-            />
-          </div>
-          <ReactQuill
-            value={currentNote}
-            onChange={handleEditorChange}
-            theme="snow"
-          />
-          <div className="mt-4 flex justify-between">
-            <button
-              onClick={cancelEdit}
-              className="rounded-md bg-gray-400 px-4 py-2 text-white hover:bg-gray-500"
-            >
-              Cancel
-            </button>
-            <button
-              onClick={() => {
-                if (currentTitle.trim() === "" || currentNote.trim() === "") {
-                  alert("Title must be filled.");
-                } else {
-                  saveNote();
-                }
-              }}
-              className="rounded-md bg-[#354F52] px-4 py-2 text-white hover:bg-blue-700"
-            >
-              {editingNote ? "Save Changes" : "Save Note"}
-            </button>
-          </div>
-        </div>
-      ) : selectedNote ? (
-        <div className="relative my-5 mb-4 max-h-[36rem] w-full overflow-y-auto rounded-lg bg-white p-6 shadow-lg md:w-[84rem]">
-          <h2 className="text-lg font-semibold">{selectedNote.title}</h2>
-          <button
-            onClick={closeNoteView}
-            className="absolute right-5 top-3 text-red-500 hover:text-red-700"
-          >
-            Close
-          </button>
-          <div className="mt-4">
-            <ReactQuill
-              value={selectedNote.content}
-              readOnly={true}
-              theme="snow"
-              modules={{ toolbar: false }}
-            />
-          </div>
-        </div>
-      ) : (
-        /* Notes List */
-        <div className="-ml-6 mt-0">
-          <div className="-mt-2 overflow-x-auto p-6">
-            <div className="grid w-max grid-flow-col grid-rows-[repeat(2,minmax(0,1fr))] gap-x-5 gap-y-2"  
-            style={{ fontFamily: '"Signika Negative", sans-serif' }}>
-              {/* New Note Button */}
-              <div
-                className="active:scale-20, mb-2 flex transform cursor-pointer flex-col items-center justify-center rounded-3xl border shadow-lg transition-transform duration-200 hover:scale-105 hover:shadow-xl"
-                onClick={() => setCreatingNewNote(true)}
-                style={{
-                  width: "16rem", // Set consistent width
-                  minHeight: "16rem", // Set consistent height
-                  backgroundColor: "#F9F9F9",
-                }}
-                //add icon
+        {/* Notes Editor or Full Note View */}
+        {editingNote !== null || creatingNewNote ? (
+          <div className="relative my-5 mb-4 max-h-[36rem] w-full overflow-y-auto rounded-lg bg-white p-6 shadow-lg md:w-[84rem]">
+            <h2 className="text-lg font-semibold">
+              {editingNote ? "Edit Note" : "Create New Note"}
+            </h2>
+            {editingNote && (
+              <button
+                onClick={() => deleteNote(editingNote)}
+                className="absolute right-5 top-5 text-red-500 hover:text-red-700"
               >
-                <FilePlus size={90} className="mb-2 text-[#354F52]" />
-              </div>
-              {loading ? (
-                <h1 className="ml-[36rem] mt-[-4.5rem] text-2xl text-gray-500">
-                  Fetching notes...
-                </h1>
-              ) : notes.length === 0  || filteredNotes.length === 0 && (
-                <div className="ml-5 mt-4 text-center">
-                  <img
-                    src="src\assets\sleeping_penguin2.gif"
-                    alt="No notes available"
-                    className="ml-[34rem] mt-[-13rem] h-[15rem] w-[15rem]"
-                  />
-                  <p
-                    style={{ fontFamily: '"Signika Negative", sans-serif' }}
-                    className="ml-[36rem] mt-[-1.5rem] text-2xl text-gray-500"
-                  >
-                    No notes available.
-                  </p>
-                </div>
-              )}
-
-              {filteredNotes.map((note, index) => (
-                <motion.div
-                  key={note.note_id}
-                  className="active:scale-20 relative mb-2 transform cursor-pointer rounded-3xl border shadow-lg transition-transform duration-200 hover:scale-105 hover:shadow-xl"
+                <Trash2 size={25} />
+              </button>
+            )}
+            <div className="mb-4 flex items-center justify-between">
+              <input
+                type="text"
+                value={currentTitle}
+                onChange={(e) => setCurrentTitle(e.target.value)}
+                placeholder="Title"
+                className="mb-4 w-full border-b p-2 text-lg font-bold"
+              />
+            </div>
+            <ReactQuill
+              value={currentNote}
+              onChange={handleEditorChange}
+              theme="snow"
+            />
+            <div className="mt-4 flex justify-between">
+              <button
+                onClick={cancelEdit}
+                className="rounded-md bg-gray-400 px-4 py-2 text-white hover:bg-gray-500"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => {
+                  if (currentTitle.trim() === "" || currentNote.trim() === "") {
+                    alert("Title must be filled.");
+                  } else {
+                    saveNote();
+                  }
+                }}
+                className="rounded-md bg-[#354F52] px-4 py-2 text-white hover:bg-blue-700"
+              >
+                {editingNote ? "Save Changes" : "Save Note"}
+              </button>
+            </div>
+          </div>
+        ) : selectedNote ? (
+          <div className="relative my-5 mb-4 max-h-[36rem] w-full overflow-y-auto rounded-lg bg-white p-6 shadow-lg md:w-[84rem]">
+            <h2 className="text-lg font-semibold">{selectedNote.title}</h2>
+            <button
+              onClick={closeNoteView}
+              className="absolute right-5 top-3 text-red-500 hover:text-red-700"
+            >
+              Close
+            </button>
+            <div className="mt-4">
+              <ReactQuill
+                value={selectedNote.content}
+                readOnly={true}
+                theme="snow"
+                modules={{ toolbar: false }}
+              />
+            </div>
+          </div>
+        ) : (
+          /* Notes List */
+          <div className="-ml-6 mt-0">
+            <div className="-mt-2 overflow-x-auto p-6">
+              <div className="grid w-max grid-flow-col grid-rows-[repeat(2,minmax(0,1fr))] gap-x-5 gap-y-2">
+                {/* New Note Button */}
+                <div
+                  className="active:scale-20, mb-2 flex transform cursor-pointer flex-col items-center justify-center rounded-3xl border shadow-lg transition-transform duration-200 hover:scale-105 hover:shadow-xl"
+                  onClick={() => setCreatingNewNote(true)}
                   style={{
                     width: "16rem", // Set consistent width
                     minHeight: "16rem", // Set consistent height
-                    backgroundColor: note.color,
+                    backgroundColor: "#F9F9F9",
                   }}
-                  onClick={() => handleNoteClick(note)}
-                  variants={afterLoading ? taskVariants : undefined}
-                  initial={afterLoading ? "hidden" : { y: 0 }}
-                  animate={afterLoading ? "visible" : undefined}
-                  exit={afterLoading ? "visible" : undefined}
-                  transition={
-                    afterLoading
-                      ? { duration: 0.2, delay: index * delayPerItem }
-                      : undefined
-                  }
+                  //add icon
                 >
-                  <h4
-                    style={{ fontFamily: '"Signika Negative", sans-serif' }}
-                    className="text-black-500 ml-3 mt-3 text-xs"
-                  >
-                    {new Date(note.created_date).toLocaleDateString()}
-                  </h4>
-                  <h3
-                    style={{ fontFamily: '"Signika Negative", sans-serif' }}
-                    className="mb-1 ml-3 text-xl font-bold uppercase"
-                  >
-                    {note.title.length > 14
-                      ? `${note.title.slice(0, 14)}...`
-                      : note.title}
-                  </h3>
-                  <hr className="mb-2 w-full border-t-2 border-black" />
-                  <p
-                    style={{
-                      fontFamily: '"Signika Negative", sans-serif',
-                      maxHeight: '30rem', // Set a max height for the paragraph
-                      overflow: 'hidden', // Hide overflowing content
-                      textOverflow: 'ellipsis', // Show ellipsis if content overflows
-                      display: '-webkit-box',
-                      WebkitBoxOrient: 'vertical',
-                      WebkitLineClamp: 6, // Limit the content to 2 lines
-                    }}
-                    className="ml-3 text-gray-700"
-                  >
-                    {note.content && note.content.includes('http') ? (
-                      // If content is a URL, render as plain text
-                      note.content
-                    ) : (
-                      // Otherwise, render normally
-                      formatContent(note.content)
-                    )}
-                  </p>
-                  <p
-                    style={{ fontFamily: '"Signika Negative", sans-serif' }}
-                    className="text-black-500 absolute bottom-3 left-5 font-serif text-xs"
-                  >
-                    {new Date(`1970-01-01T${note.created_time}`).toLocaleTimeString(
-                      [],
-                      {
-                        hour: "2-digit",
-                        minute: "2-digit",
-                        hour12: true,
-                      }
-                    )}
-                  </p>
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      editNote(note.note_id);
-                    }}
-                    className="absolute right-3 top-7 text-black hover:text-[#719191]"
-                  >
-                    <FilePen size={20} />
-                  </button>
-                </motion.div>
-              ))}
+                  <FilePlus size={90} className="mb-2 text-[#354F52]" />
+                </div>
+                {/* Render Notes */}
+                {filteredNotes.length === 0 ? (
+                  <div className="ml-5 mt-4 text-center">
+                    <img
+                      src="src\assets\sleeping_penguin2.gif"
+                      alt="No notes available"
+                      className="ml-[34rem] mt-[-13rem] h-[15rem] w-[15rem]"
+                    />
+                    <p
+                      style={{ fontFamily: '"Signika Negative", sans-serif' }}
+                      className="ml-[36rem] mt-[-1.5rem] text-2xl text-gray-500"
+                    >
+                      No notes available.
+                    </p>
+                  </div>
+                ) : (
+                  filteredNotes.map((note) => (
+                    <div
+                      key={note.note_id}
+                      className="active:scale-20 relative mb-2 transform cursor-pointer rounded-3xl border shadow-lg transition-transform duration-200 hover:scale-105 hover:shadow-xl"
+                      style={{
+                        width: "16rem", // Set consistent width
+                        minHeight: "16rem", // Set consistent height
+                        backgroundColor: note.color,
+                      }}
+                      onClick={() => handleNoteClick(note)}
+                    >
+                      <h4
+                        style={{ fontFamily: '"Signika Negative", sans-serif' }}
+                        className="text-black-500 ml-3 mt-3 text-xs"
+                      >
+                        {new Date(note.created_date).toLocaleDateString()}
+                      </h4>
+                      <h3
+                        style={{ fontFamily: '"Signika Negative", sans-serif' }}
+                        className="mb-1 ml-3 text-xl font-bold uppercase"
+                      >
+                        {note.title.length > 14
+                          ? `${note.title.slice(0, 14)}...`
+                          : note.title}
+                      </h3>
+                      <hr className="mb-2 w-full border-t-2 border-black" />
+                      <p
+                        style={{ fontFamily: '"Signika Negative", sans-serif' }}
+                        className="ml-3 text-gray-700"
+                      >
+                        {note.content.length > 20
+                          ? `${note.content.slice(0, 20)}...`
+                          : note.content}
+                      </p>
+                      <p
+                        style={{ fontFamily: '"Signika Negative", sans-serif' }}
+                        className="text-black-500 absolute bottom-3 left-5 font-serif text-xs"
+                      >
+                        {new Date(
+                          `1970-01-01T${note.created_time}`,
+                        ).toLocaleTimeString([], {
+                          hour: "2-digit",
+                          minute: "2-digit",
+                          hour12: true,
+                        })}
+                      </p>
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          editNote(note.note_id);
+                        }}
+                        className="absolute right-3 top-7 text-black hover:text-[#719191]"
+                      >
+                        <FilePen size={20} />
+                      </button>
+                    </div>
+                  ))
+                )}
+              </div>
             </div>
           </div>
-        </div>
-      )}
-    </>
-  );
-};
+        )}
+        </>
+    )
+}
 
     
 
