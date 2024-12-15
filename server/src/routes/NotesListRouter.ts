@@ -8,10 +8,8 @@ router.get("/getNotes", authenticateToken, async (req: Request, res: Response) =
     if (!req.user) {
       return res.status(401).json({ message: 'Unauthorized: No user information' });
     }
-
     const userId = req.user.user_id;
 
-    // Assuming you're using a database like PostgreSQL
     const result = await pool.query("SELECT * FROM notes WHERE user_id = $1", [userId]);
     res.status(200).json(result.rows);
   } catch (error) {
@@ -36,8 +34,8 @@ router.post("/insertNote", authenticateToken, async (req: Request, res: Response
     }
 
     const query = `
-    INSERT INTO notes (note_id, title, content, color, created_date, created_time, user_id)
-    VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *;
+      INSERT INTO notes (note_id, title, content, color, created_date, created_time, user_id)
+      VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *;
     `;
 
     const result = await pool.query(query, [
@@ -84,7 +82,6 @@ router.delete("/deleteNote/:note_id", authenticateToken, async (req: Request, re
     if (result.rowCount === 0) {
       return res.status(404).json({ message: "Note not found" });
     }
-
     res
       .status(200)
       .json({ message: "Note deleted", deletedNote: result.rows[0] });
@@ -110,10 +107,10 @@ router.patch("/updateNote/:note_id", authenticateToken, async (req: Request, res
     }
 
     const query = `
-            UPDATE notes 
-            SET title = $1, content = $2, updated_at = $3
-            WHERE note_id = $4 AND user_id = $5
-            RETURNING *;
+          UPDATE notes 
+          SET title = $1, content = $2, updated_at = $3
+          WHERE note_id = $4 AND user_id = $5
+          RETURNING *;
         `;
     const values = [title, content, updatedAt || new Date().toISOString(), note_id, userId];
 

@@ -5,27 +5,44 @@ import { Note } from "../types/NotepadTypes";
 export const useNotepad= () => {
     const [notes, setNotes] = useState<Note[]>([]);
     const token = localStorage.getItem('token');
-
+    const [loading, setLoading] = useState<boolean>(false)
+    const [afterLoading, setAfterLoading] = useState<boolean>(false);
     // Fetched Notes
     const fetchNotes = async () => {
+        setLoading(true)
         try {
-        const response = await axios.get("http://localhost:3002/notes/getNotes", {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
+            const response = await axios.get("http://localhost:3002/notes/getNotes", 
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
             });
-        
-        const notesWithDateTime = response.data.map((note: any) => ({
-            ...note,}));
-        setNotes(notesWithDateTime);
+            
+            const notesWithDateTime = response.data.map((note: any) => ({
+                ...note,}));
+            setNotes(notesWithDateTime);
         } catch (error) {
-        console.error("Error fetching notes:", error);
+            console.error("Error fetching notes:", error);
+            
+        } finally {
+            setLoading(false)
+            setAfterLoading(true)
         }
     };
 
     useEffect(() => {
         fetchNotes(); // Fetch notes on mount
       }, []);
+
+      useEffect(() => {
+        if (setAfterLoading) {
+          const timer = setTimeout(() => {
+            setAfterLoading(false);
+            return () => clearTimeout(timer);
+          }, 1200);
+        }
+      });
+    
       
     // Adding Note
     const addNote = async (newNote: Note) => {
@@ -77,11 +94,13 @@ export const useNotepad= () => {
     }
 
     return {
+        loading,
         fetchNotes,
         addNote,
         notes,
         setNotes,
         saveNOte,
-        deleteNOte
+        deleteNOte,
+        afterLoading
     };
 };

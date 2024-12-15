@@ -1,28 +1,34 @@
 import { useState } from "react";
-import capybara from "../../assets/capibara_egg.png";
-import cat from "../../assets/cat_egg.png";
-import dinosaur from "../../assets/dinosaur_egg.png";
-import duck from "../../assets/duck_egg.png";
-import penguin from "../../assets/penguin_egg.png";
-import unicorn from "../../assets/unicorn_egg.png";
+
+//eggs
+import capybara from "../../assets/eggs/capibara_egg.png";
+import cat from "../../assets/eggs/cat_egg.png";
+import dinosaur from "../../assets/eggs/dinosaur_egg.png";
+import duck from "../../assets/eggs/duck_egg.png";
+import penguin from "../../assets/eggs/penguin_egg.png";
+import unicorn from "../../assets/eggs/unicorn_egg.png";
+
+
+import { usePets } from "../../hooks/usePets";
+import { v4 as uuidv4 } from "uuid";
+import { Pet } from "../../types/PetTypes";
 
 interface PetSelectionModalProps {
   onClose: () => void;
-  onPetAdded: (petData: any) => void;
+  onPetAdded: (petData: any) => void 
 }
 
-const PetSelectionModal: React.FC<PetSelectionModalProps> = ({
-  onClose,
-  onPetAdded,
-}) => {
+const PetSelectionModal: React.FC<PetSelectionModalProps> = ({ onClose,  onPetAdded }) => {
   const [selectedPet, setSelectedPet] = useState<string>("");
   const [petName, setPetName] = useState<string>("");
+  const { addPet } = usePets();
+
 
   const petColors: Record<string, string> = {
     capybara: "border-red-500",
     cat: "border-yellow-200",
     dinosaur: "border-green-500",
-    duck: "border-yellow-400", // Gold-like color
+    duck: "border-yellow-400",
     penguin: "border-gray-500",
     unicorn: "border-pink-500",
   };
@@ -40,24 +46,36 @@ const PetSelectionModal: React.FC<PetSelectionModalProps> = ({
     setSelectedPet(pet);
   };
 
-  const handleSubmit = () => {
-    if (!selectedPet || !petName) {
-      alert("Please select a pet and enter a name.");
+  const handleSubmit = async () => {
+    if (!selectedPet || !petName.trim()) {
+      alert("Please select a pet and enter a valid name.");
       return;
     }
 
-    // Just display the selected pet data (no DB call yet)
-    const petData = {
+    // Prepare pet data to be inserted
+    const now = new Date();
+    const petData: Pet = {
+      pet_id: uuidv4(),
       pet_type: selectedPet,
-      pet_name: petName,
-      pet_currency: 1000, // Default currency
-      pet_progress_bar: 0, // Default progress
-      pet_evolution_rank: 1, // Default evolution rank starts at 1
-      pet_max_value: 150, // Default max value
+      pet_name: petName.trim(),
+      pet_currency: 1000,
+      pet_progress_bar: 0,
+      pet_evolution_rank: 1,
+      pet_max_value: 150,
+      created_date: now.toISOString().split("T")[0],
+      created_time: now.toTimeString().split(" ")[0],
     };
 
-    onPetAdded(petData); // Pass the pet data to the parent
-    onClose(); // Close the modal
+    console.log("Adding pet data:", petData); // Log for debugging
+
+    try {
+      await addPet(petData); // Add pet data to backend
+      onPetAdded(petData)
+      onClose(); // Close modal after successful submission
+    } catch (error) {
+      console.error("Error adding pet:", error);
+      alert("There was an issue adding your pet. Please try again.");
+    }
   };
 
   return (
@@ -84,9 +102,7 @@ const PetSelectionModal: React.FC<PetSelectionModalProps> = ({
             (pet) => (
               <button
                 key={pet}
-                className={`w-20 h-20 p-2 border-2 rounded-md ${
-                  petColors[pet]
-                } transition-all duration-300 ${
+                className={`w-20 h-20 p-2 border-2 rounded-md ${petColors[pet]} transition-all duration-300 ${
                   selectedPet === pet ? "scale-110 p-4 border-4" : "p-2"
                 }`}
                 onClick={() => handlePetSelection(pet)}

@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { pool, router } from '../database/CarmineDB';
+import { pool, router } from '../database/CarmineDB'
 import bcrypt from 'bcrypt';
 // import jwt from 'jsonwebtoken';
 import crypto from 'crypto';
@@ -11,7 +11,7 @@ const generateRandomToken = () => {
   return crypto.randomBytes(32).toString('hex');  // 64-character hex string
 };
 
-// Login route
+// For when user login
 router.post('/userLogin', async (req: Request, res: Response): Promise<void> => {
   const { user_name, user_password } = req.body;
 
@@ -27,7 +27,7 @@ router.post('/userLogin', async (req: Request, res: Response): Promise<void> => 
       `SELECT * FROM users WHERE user_name = $1`,
       [user_name]
     );
-
+    
     const user = userQuery.rows[0];
     if (!user) {
       res.status(401).json({ message: "Invalid username or password" });
@@ -42,6 +42,7 @@ router.post('/userLogin', async (req: Request, res: Response): Promise<void> => 
       res.status(401).json({ message: "Invalid username or password" });
       return;
     }
+
 
     await pool.query(`UPDATE users SET token = NULL WHERE user_id = $1`, [user.user_id]);
 
@@ -66,6 +67,7 @@ router.post('/userLogin', async (req: Request, res: Response): Promise<void> => 
       user_id: user.user_id,
       userName: user.user_name,
     });
+
   } catch (error) {
     console.error("Error during login:", error);
     res.status(500).json({ message: "Internal server error" });

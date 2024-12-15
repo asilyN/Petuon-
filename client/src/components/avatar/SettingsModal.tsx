@@ -119,11 +119,12 @@ const SettingPageModal: React.FC<SettingPageModalProps> = ({ onClose, fetchUserD
 
     // Update user profile
     try {
-      await axios.patch("http://localhost:3002/editprofile/getUpdatedUser", data, {
+      await axios.patch("http://localhost:3002/editprofile/updateUser", data, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
+      
       setPasswordMatchError(''); // Clear any previous errors
       setEmailMatchError('');
       alert('Profile saved');

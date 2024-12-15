@@ -3,6 +3,7 @@ export interface Flashcard {
   answer: string;
   flashcard_id: string | null;
   unique_flashcard_id: string;
+  progress: boolean;
 }
 
 export interface CreateFlashcardProps {

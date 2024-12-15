@@ -69,9 +69,9 @@ router.post(
       }
 
       const query = `
-            INSERT INTO tasks (task_id, text, created_at, due_at, completed, user_id)
-            VALUES ($1, $2, $3, $4, $5, $6)
-            RETURNING *;
+          INSERT INTO tasks (task_id, text, created_at, due_at, completed, user_id)
+          VALUES ($1, $2, $3, $4, $5, $6)
+          RETURNING *;
         `;
 
       const values = [task_id, text, createdAt, dueAt, completed, userId];
@@ -133,10 +133,10 @@ router.patch(
       }
 
       const query = `
-            UPDATE tasks 
-            SET completed = $1
-            WHERE task_id = $2 AND user_id = $3
-            RETURNING *;
+          UPDATE tasks 
+          SET completed = $1
+          WHERE task_id = $2 AND user_id = $3
+          RETURNING *;
         `;
       const values = [completed, task_id, userId];
 
@@ -150,8 +150,7 @@ router.patch(
 );
 
 // Update a task
-router.patch(
-  "/updateTask/:task_id",
+router.patch("/updateTask/:task_id",
   authenticateToken,
   validateUpdateTask,
   async (req: Request, res: Response) => {
@@ -165,8 +164,8 @@ router.patch(
       }
 
         const checkQuery = `
-        SELECT * FROM tasks
-        WHERE task_id = $1 AND user_id = $2;
+          SELECT * FROM tasks
+          WHERE task_id = $1 AND user_id = $2;
       `;
 
       const checkValues = [task_id, userId];
@@ -178,10 +177,10 @@ router.patch(
       }
       
       const query = `
-            UPDATE tasks 
-            SET text = $1, due_at = $2 
-            WHERE task_id = $3 AND user_id = $4
-            RETURNING *;
+          UPDATE tasks 
+          SET text = $1, due_at = $2 
+          WHERE task_id = $3 AND user_id = $4
+          RETURNING *;
         `;
       const values = [text, dueAt, task_id, userId];
 

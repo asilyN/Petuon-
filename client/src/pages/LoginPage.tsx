@@ -24,6 +24,16 @@ const LoginPage: React.FC<Props> = () => {
 
   const handleLogin = async (form: LoginFormsInputs) => {
     try {
+
+        const response = await axios.post("http://localhost:3002/login/userLogin", {
+          user_name: form.user_name,
+          user_password: form.user_password,
+        });
+        if (response.data.token) {
+          // Store JWT token in localStorage for persistent sessions
+          localStorage.setItem("token", response.data.token);
+          // alert("Login successful! Redirecting to dashboard...");
+
       setLoading(true);
       const response = await axios.post("http://localhost:3002/login/userLogin", {
         user_name: form.user_name,
@@ -44,6 +54,7 @@ const LoginPage: React.FC<Props> = () => {
           console.log("Token successfully retrieved:", fetchedToken);
           localStorage.setItem("token", fetchedToken);
           setToken(fetchedToken); // Set token in state
+
           toast.success("Login successful! Redirecting to dashboard...");
           setTimeout(() => {
             navigate("/dashboard");
