@@ -38,41 +38,6 @@ const FlashcardComponent: React.FC = () => {
     handleUpdateDeckTitle
   } = useFlashcardHooks();
 
-  const [, setEditingQuestion] = useState<string | null>(null);
-  const [, setEditingAnswer] = useState<string | null>(null);
-
-  const handleSaveQuestion = (flashcardId: string, newQuestion: string) => {
-    updateFlashcard(flashcardId, newQuestion, "question");
-    setEditingQuestion(null);
-  };
-
-  const handleSaveAnswer = (flashcardId: string, newAnswer: string) => {
-    updateFlashcard(flashcardId, newAnswer, "answer");
-    setEditingAnswer(null);
-  };
-
-  const updateFlashcard = async (flashcardId: string, newValue: string, field: "question" | "answer") => {
-    try {
-      // API call to update the flashcard
-      await axios.put(`${import.meta.env.VITE_API_URL}/cards/updateFlashcard/${flashcardId}`, {
-        [field]: newValue,
-      });
-
-      // Optimistically update the flashcards state to reflect the change
-      setFlashcards(prevFlashcards => 
-        prevFlashcards.map(flashcard => 
-          flashcard.unique_flashcard_id === flashcardId
-            ? { ...flashcard, [field]: newValue } // Update the modified field
-            : flashcard
-        )
-      );
-
-      console.log(`${field} updated successfully!`);
-    } catch (error) {
-      console.error("Error updating flashcard:", error);
-    }
-  };
-
   const [currentIndex, setCurrentIndex] = useState(0);
   const visibleDecksCount = 3; // Define the number of decks to be visible at a time
   const [highlightIndex, setHighlightIndex] = useState(0); // Define highlightIndex state

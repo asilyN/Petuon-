@@ -7,7 +7,7 @@ import ToDoListComponent from "../components/ToDoListComponent";
 import DeckProgress from "../components/dashboard/DeckProgress";
 
 const DashboardPage = () => {
-  const [petData, setPetData] = useState<any>(null);
+  const [, setPetData] = useState<any>(null);
 
   const handlePetAdded = (pet: any) => {
     setPetData(pet); // Update pet data state
