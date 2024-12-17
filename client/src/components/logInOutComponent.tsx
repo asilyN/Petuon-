@@ -1,8 +1,10 @@
+import loading from '../assets/Petuon_loading_.gif';
+
 const LogInOut = () => {
     return (
         <div className="loading-overlay">
             <img
-            src="src\assets\Petuon_loading_.gif"
+            src={loading}
             alt="Loading..."
             className="loading-gif"
             />

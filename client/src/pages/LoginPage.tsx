@@ -9,6 +9,7 @@ import LogInOut from "../components/logInOutComponent";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
+
 const LoginPage: React.FC<Props> = () => {
   const [error] = useState<string | null>(null); // Track error message
   const navigate = useNavigate();
