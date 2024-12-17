@@ -62,7 +62,7 @@ const FlashcardComponent: React.FC = () => {
   const updateFlashcard = async (flashcardId: string, newValue: string, field: "question" | "answer") => {
     try {
       // API call to update the flashcard
-      await axios.put(`http://localhost:3002/cards/updateFlashcard/${flashcardId}`, {
+      await axios.put(`${import.meta.env.VITE_API_URL}/cards/updateFlashcard/${flashcardId}`, {
         [field]: newValue,
       });
 
@@ -226,7 +226,7 @@ const FlashcardComponent: React.FC = () => {
                 onKeyDown={async (e) => {
                   if (e.key === 'Enter') {
                     await saveDeck();
-                    const response = await axios.get(`http://localhost:3002/cards/getDecks`, {
+                    const response = await axios.get(`${import.meta.env.VITE_API_URL}/cards/getDecks`, {
                       headers: {
                         Authorization: `Bearer ${token}`
                       }
@@ -246,7 +246,7 @@ const FlashcardComponent: React.FC = () => {
               <button
                 onClick={async () => {
                   await saveDeck();
-                  const response = await axios.get(`http://localhost:3002/cards/getDecks`, {
+                  const response = await axios.get(`${import.meta.env.VITE_API_URL}/cards/getDecks`, {
                     headers: {
                       Authorization: `Bearer ${token}`
                     }

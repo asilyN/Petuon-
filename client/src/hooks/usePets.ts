@@ -16,7 +16,7 @@ export const usePets = () => {
     setHasPet(true)
     setLoading(true)
     try {
-      const response = await axios.get("http://localhost:3002/pets/getPets", {
+      const response = await axios.get(`${import.meta.env.VITE_API_URL}/pets/getPets`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -66,7 +66,7 @@ export const usePets = () => {
 
       console.log("Inserting pet data:", petWithUserId);
 
-      await axios.post("http://localhost:3002/pets/insertPet", petWithUserId, {
+      await axios.post(`${import.meta.env.VITE_API_URL}/pets/insertPet`, petWithUserId, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -93,7 +93,7 @@ export const usePets = () => {
 
     try {
       await axios.patch(
-        `http://localhost:3002/pets/updatePet/${editingPetId}`,
+        `${import.meta.env.VITE_API_URL}/pets/updatePet/${editingPetId}`,
         updatedPet,
         {
           headers: {
@@ -113,7 +113,7 @@ export const usePets = () => {
     setPets((prevPets) => prevPets.filter((pet) => pet.pet_id !== pet_id));
 
     try {
-      await axios.delete(`http://localhost:3002/pets/deletePet/${pet_id}`, {
+      await axios.delete(`${import.meta.env.VITE_API_URL}/pets/deletePet/${pet_id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -126,7 +126,7 @@ export const usePets = () => {
 
   const updatePet = async (updatedPet: Pet) => {
     await axios.patch(
-      `http://localhost:3002/pets/updatePet/${updatedPet.pet_id}`,
+      `${import.meta.env.VITE_API_URL}/pets/updatePet/${updatedPet.pet_id}`,
       {
         pet_currency: updatedPet.pet_currency,
         pet_progress_bar: updatedPet.pet_progress_bar,

@@ -38,7 +38,7 @@ const RegisterPage: React.FC = () => {
         user_name: form.user_name,
       };
     
-      const response = await axios.post("http://localhost:3002/register/registerUser", formData)
+      const response = await axios.post(`${import.meta.env.VITE_API_URL}/register/registerUser`, formData)
       // Handle successful backend registration
       alert(response.data.message); // This will show the success message from the backend
   

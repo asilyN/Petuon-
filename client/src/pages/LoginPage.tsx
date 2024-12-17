@@ -23,7 +23,7 @@ const LoginPage: React.FC<Props> = () => {
   const handleLogin = async (form: LoginFormsInputs) => {
     setLoading(true)
     try {
-        const response = await axios.post("http://localhost:3002/login/userLogin", {
+        const response = await axios.post(`${import.meta.env.VITE_API_URL}/login/userLogin`, {
           user_name: form.user_name,
           user_password: form.user_password,
         });

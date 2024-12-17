@@ -23,7 +23,7 @@ const Avatar = () => {
 
   const fetchUserData = async () => {
     try {
-      const response = await axios.get("http://localhost:3002/avatar/getUser", {
+      const response = await axios.get(`${import.meta.env.VITE_API_URL}/avatar/getUser`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

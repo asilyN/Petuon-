@@ -26,7 +26,7 @@ export const useToDoList = () => {
       if (!token) {
         throw new Error('No token found');
       }
-      const response = await axios.get("http://localhost:3002/tasks/getTask",  
+      const response = await axios.get(`${import.meta.env.VITE_API_URL}/tasks/getTask`,  
       {
         headers: {
           Authorization: `Bearer ${token}`
@@ -49,7 +49,7 @@ export const useToDoList = () => {
         }),
       );
       const response1 = await axios.get(
-        "http://localhost:3002/tasks/getCompleteTask",
+        `${import.meta.env.VITE_API_URL}/tasks/getCompleteTask`,
       {
         headers: {
           Authorization: `Bearer ${token}`
@@ -118,7 +118,7 @@ export const useToDoList = () => {
 
       setTasksBackup([...tasks, newTask]);
 
-      await axios.post("http://localhost:3002/tasks/insertTask", newTask, 
+      await axios.post(`${import.meta.env.VITE_API_URL}/tasks/insertTask`, newTask, 
       {
         headers: {
           Authorization: `Bearer ${token}` // Include the token for authentication
@@ -141,7 +141,7 @@ export const useToDoList = () => {
 
       setCompletedTasks((prevTasks) => prevTasks.filter((task) => task.task_id !== task_id));
       
-      await axios.delete(`http://localhost:3002/tasks/deleteTask/${task_id}`, {
+      await axios.delete(`${import.meta.env.VITE_API_URL}/tasks/deleteTask/${task_id}`, {
         headers: {
           Authorization: `Bearer ${token}` 
         }
@@ -223,7 +223,7 @@ export const useToDoList = () => {
         }, 800);
       }
 
-      await axios.patch(`http://localhost:3002/tasks/completeTask/${task_id}`,
+      await axios.patch(`${import.meta.env.VITE_API_URL}/tasks/completeTask/${task_id}`,
         {
           completed: updatedCompletedStatus, 
         },
@@ -350,7 +350,7 @@ export const useToDoList = () => {
       }
 
       await axios.patch(
-        `http://localhost:3002/tasks/updateTask/${task_id}`,
+        `${import.meta.env.VITE_API_URL}/tasks/updateTask/${task_id}`,
         {
           text: trimmedText,          
           dueAt: updatedDueAt,        

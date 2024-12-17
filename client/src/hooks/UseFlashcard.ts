@@ -26,7 +26,7 @@ export const useFlashcardHooks = () => {
     try {
       if (!token) throw new Error("No token found");
 
-      const response = await axios.get(`http://localhost:3002/cards/getDecks`, {
+      const response = await axios.get(`${import.meta.env.VITE_API_URL}/cards/getDecks`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -63,7 +63,7 @@ export const useFlashcardHooks = () => {
       setOnFirstPage(true);
       const data: Deck = { title: deckTitle, deck_id: uuidv4() };
 
-      await axios.post(`http://localhost:3002/cards/insertDecks`, data, {
+      await axios.post(`${import.meta.env.VITE_API_URL}/cards/insertDecks`, data, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -82,7 +82,7 @@ export const useFlashcardHooks = () => {
       setIsReviewing(false);
       setOnFirstPage(false);
 
-      const response = await axios.get(`http://localhost:3002/cards/getFlashcards`, {
+      const response = await axios.get(`${import.meta.env.VITE_API_URL}/cards/getFlashcards`, {
         params: { deck_id },
       });
 
@@ -109,7 +109,7 @@ export const useFlashcardHooks = () => {
 
   const deleteDeck = async (deckId: string) => {
     try {
-      await axios.delete(`http://localhost:3002/cards/deleteDeck/${deckId}`, {
+      await axios.delete(`${import.meta.env.VITE_API_URL}/cards/deleteDeck/${deckId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setDecks(decks.filter((deck) => deck.deck_id !== deckId));
@@ -120,7 +120,7 @@ export const useFlashcardHooks = () => {
 
   const deleteFlashcard = async (unique_flashcard_id: string) => {
     try {
-      await axios.delete(`http://localhost:3002/cards/deleteFlashcard/${unique_flashcard_id}`);
+      await axios.delete(`${import.meta.env.VITE_API_URL}/cards/deleteFlashcard/${unique_flashcard_id}`);
       setFlashcards(flashcards.filter((flashcard) => flashcard.unique_flashcard_id !== unique_flashcard_id));
       console.log("Flashcard deleted successfully!");
     } catch (error) {
@@ -146,7 +146,7 @@ export const useFlashcardHooks = () => {
   
     try {
       const updateResponse = await axios.put(
-        `http://localhost:3002/cards/updateDeckTitle/${deckId}`,
+        `${import.meta.env.VITE_API_URL}/cards/updateDeckTitle/${deckId}`,
         { title: deckTitle },
         {
           headers: {
@@ -156,7 +156,7 @@ export const useFlashcardHooks = () => {
       );
   
       if (updateResponse.status === 200) {
-        const response = await axios.get(`http://localhost:3002/cards/getDecks`, {
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/cards/getDecks`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -186,7 +186,7 @@ export const useFlashcardHooks = () => {
       data[field] = newValue; // Dynamically set the field being updated
   
       const response = await axios.put(
-        `http://localhost:3002/cards/updateFlashcard/${flashcardId}`,
+        `${import.meta.env.VITE_API_URL}/cards/updateFlashcard/${flashcardId}`,
         data
       );
       console.log(`${field} updated successfully!`, response.data);
