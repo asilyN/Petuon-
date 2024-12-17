@@ -4,6 +4,8 @@ import PetSelectionModal from "./PetSelectionModal";
 import CareMessageModal from "./CareMessageModal"; // Import the CareMessageModal component
 import CinematicEvolutionModal from "./CinematicEvolutionModal"; // Import the new modal component
 import axios from "axios";
+import React from "react";
+import { getEvolutionGif } from "../../utils/getEvolutionGif"; 
 
 const token = localStorage.getItem("token");
 
@@ -12,7 +14,7 @@ interface PetsProps {
   onPetUpdated: (updatedPet: any) => void;
 }
 
-const Pets: React.FC<PetsProps> = ({ onPetAdded, onPetUpdated }) => {
+const Pets: React.FC<PetsProps> = ({ onPetAdded, onPetUpdated }) => { 
   const [showModal, setShowModal] = useState(false);
   const [showCareMessageModal, setShowCareMessageModal] = useState(false);
   const [showEvolutionCinematic, setShowEvolutionCinematic] = useState(false); // New state for evolution cinematic
@@ -72,7 +74,7 @@ const Pets: React.FC<PetsProps> = ({ onPetAdded, onPetUpdated }) => {
 
       try {
         await axios.patch(
-          `${import.meta.env.VITE_API_URL}/pets/updatePet/${updatedPet.pet_id}`,
+          `http://localhost:3002/pets/updatePet/${updatedPet.pet_id}`,
           {
             pet_currency: updatedPet.pet_currency,
             pet_progress_bar: updatedPet.pet_progress_bar,
@@ -103,16 +105,6 @@ const Pets: React.FC<PetsProps> = ({ onPetAdded, onPetUpdated }) => {
     }
   };
 
-  const getEvolutionGif = (petType: string, evolutionRank: number): string => {
-    if (tempGif) {
-      return tempGif;
-    }
-    if (evolutionRank === 1) {
-      return `src/assets/pets/${petType}/evolution_1.png`;
-    }
-    return `src/assets/pets/${petType}/evolution_${evolutionRank}.gif`;
-  };
-
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -138,7 +130,7 @@ const Pets: React.FC<PetsProps> = ({ onPetAdded, onPetUpdated }) => {
           </div>
           <div className="flex flex-col items-center">
             <img
-              src={getEvolutionGif(petData.pet_type, petData.pet_evolution_rank)}
+              src={getEvolutionGif(petData.pet_type, petData.pet_evolution_rank, tempGif)}
               alt="Pet"
               className="w-10 h-64 md:w-96 md:h-96 object-contain transition-all duration-500"
             />
