@@ -1,4 +1,4 @@
-import { SetStateAction, useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useFlashcardHooks } from "../../hooks/UseFlashcard";
 import { CreateFlashcard } from "./createflashcard";
 import { QuizFlashcard } from "./quizPage";
@@ -38,16 +38,8 @@ const FlashcardComponent: React.FC = () => {
     handleUpdateDeckTitle
   } = useFlashcardHooks();
 
-  const [editingQuestion, setEditingQuestion] = useState<string | null>(null);
-  const [editingAnswer, setEditingAnswer] = useState<string | null>(null);
-
-  const handleEditQuestion = (flashcardId: string) => {
-    setEditingQuestion(flashcardId);
-  };
-
-  const handleEditAnswer = (flashcardId: string) => {
-    setEditingAnswer(flashcardId);
-  };
+  const [, setEditingQuestion] = useState<string | null>(null);
+  const [, setEditingAnswer] = useState<string | null>(null);
 
   const handleSaveQuestion = (flashcardId: string, newQuestion: string) => {
     updateFlashcard(flashcardId, newQuestion, "question");
@@ -81,15 +73,6 @@ const FlashcardComponent: React.FC = () => {
     }
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent, flashcardId: string, newValue: string, field: "question" | "answer") => {
-    if (e.key === 'Enter') {
-      if (field === "question") {
-        handleSaveQuestion(flashcardId, newValue);
-      } else if (field === "answer") {
-        handleSaveAnswer(flashcardId, newValue);
-      }
-    }
-  };
   const [currentIndex, setCurrentIndex] = useState(0);
   const visibleDecksCount = 3; // Define the number of decks to be visible at a time
   const [highlightIndex, setHighlightIndex] = useState(0); // Define highlightIndex state
@@ -538,6 +521,6 @@ const FlashcardComponent: React.FC = () => {
 
 export default FlashcardComponent;
 
-function setSelectedDeck(deck: { deck_id: string; title: string; }) {
+function setSelectedDeck(_deck: { deck_id: string; title: string; }) {
   throw new Error("Function not implemented.");
 }

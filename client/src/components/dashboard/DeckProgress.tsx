@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { boolean } from "yup";
+
 
 interface ProgressItem {
   title: string;
@@ -13,7 +13,6 @@ const DeckProgress: React.FC = () => {
   const [progress, setProgress] = useState<number>(0);
   const [progressItems, setProgressItems] = useState<ProgressItem[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
-  const [afterLoading, setafterLoading] = useState<boolean>(false);
   const token = localStorage.getItem("token");
 
   const fetchFlashcardsForDeck = async (deck_id: string) => {
