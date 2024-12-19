@@ -21,6 +21,8 @@ const validateGetTask = (req, res, next) => __awaiter(void 0, void 0, void 0, fu
         next();
     }
     catch (error) {
+        console.error("Error getting tasks:", error);
+        res.status(500).json({ message: "Internal server error" });
     }
 });
 exports.validateGetTask = validateGetTask;

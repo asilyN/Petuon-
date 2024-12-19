@@ -21,7 +21,6 @@ CarmineDB_1.router.get("/getNotes", AuthMiddleware_1.default, (req, res) => __aw
             return res.status(401).json({ message: 'Unauthorized: No user information' });
         }
         const userId = req.user.user_id;
-        // Assuming you're using a database like PostgreSQL
         const result = yield CarmineDB_1.pool.query("SELECT * FROM notes WHERE user_id = $1", [userId]);
         res.status(200).json(result.rows);
     }
@@ -44,8 +43,8 @@ CarmineDB_1.router.post("/insertNote", AuthMiddleware_1.default, (req, res) => _
             return res.status(400).json({ message: "Missing required fields" });
         }
         const query = `
-    INSERT INTO notes (note_id, title, content, color, created_date, created_time, user_id)
-    VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *;
+      INSERT INTO notes (note_id, title, content, color, created_date, created_time, user_id)
+      VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *;
     `;
         const result = yield CarmineDB_1.pool.query(query, [
             note_id,
@@ -108,10 +107,10 @@ CarmineDB_1.router.patch("/updateNote/:note_id", AuthMiddleware_1.default, (req,
             return res.status(400).json({ message: "Title and content are required." });
         }
         const query = `
-            UPDATE notes 
-            SET title = $1, content = $2, updated_at = $3
-            WHERE note_id = $4 AND user_id = $5
-            RETURNING *;
+          UPDATE notes 
+          SET title = $1, content = $2, updated_at = $3
+          WHERE note_id = $4 AND user_id = $5
+          RETURNING *;
         `;
         const values = [title, content, updatedAt || new Date().toISOString(), note_id, userId];
         const result = yield CarmineDB_1.pool.query(query, values);
