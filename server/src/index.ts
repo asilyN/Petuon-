@@ -33,13 +33,12 @@ app.use('/avatar', AvatarRouter);
 app.use('/editprofile', EditProfileRouter)
 
 
-app.use(express.static(path.join(__dirname, '../client/dist')));
+app.use(express.static(path.join(__dirname, '../../client/dist'))); // Adjust path to go up to the root
 
 // Catch-all route for client-side routing
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../client/dist', 'index.html'));
+  res.sendFile(path.join(__dirname, '../../client/dist', 'index.html')); // Adjust path to go up to the root
 });
-
  // Start Server on port 3002
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
