@@ -33,12 +33,13 @@ app.use('/avatar', AvatarRouter);
 app.use('/editprofile', EditProfileRouter)
 
 
-app.use(express.static(path.join(__dirname, 'dist')));
+app.use(express.static(path.join(__dirname, '../client/build')));
 
-// Catch-all route for React Router
+// Catch-all route for client-side routing
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'dist', 'index.html'));
+  res.sendFile(path.join(__dirname, '../client/build', 'index.html'));
 });
+
  // Start Server on port 3002
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
