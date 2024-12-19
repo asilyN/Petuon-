@@ -11,6 +11,7 @@ import NotesListRouter from "./routes/NotesListRouter";
 import PetsRouter from "./routes/PetsRouter"
 import AvatarRouter from "./routes/AvatarRouter"
 import EditProfileRouter from "./routes/EditProfileRouter"
+import path from "path";
 
 dotenv.config();
 
@@ -31,6 +32,13 @@ app.use('/pets', PetsRouter)
 app.use('/avatar', AvatarRouter);
 app.use('/editprofile', EditProfileRouter)
 
+
+app.use(express.static(path.join(__dirname, 'dist')));
+
+// Catch-all route for React Router
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'dist', 'index.html'));
+});
  // Start Server on port 3002
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
