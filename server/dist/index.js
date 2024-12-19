@@ -31,10 +31,10 @@ app.use('/cards', FlashcardRouter_1.default);
 app.use('/pets', PetsRouter_1.default);
 app.use('/avatar', AvatarRouter_1.default);
 app.use('/editprofile', EditProfileRouter_1.default);
-app.use(express_1.default.static(path_1.default.join(__dirname, '../client/build')));
+app.use(express_1.default.static(path_1.default.join(__dirname, '../../client/dist'))); // Adjust path to go up to the root
 // Catch-all route for client-side routing
 app.get('*', (req, res) => {
-    res.sendFile(path_1.default.join(__dirname, '../client/build', 'index.html'));
+    res.sendFile(path_1.default.join(__dirname, '../../client/dist', 'index.html')); // Adjust path to go up to the root
 });
 // Start Server on port 3002
 app.listen(PORT, () => {
