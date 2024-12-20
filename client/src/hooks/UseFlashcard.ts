@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import { Deck, Flashcard } from "../types/FlashCardTypes";
 import { v4 as uuidv4 } from "uuid";
@@ -7,7 +7,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 
 const token = localStorage.getItem("token");
-//main flashcard hooks
+
 export const useFlashcardHooks = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [flashcards, setFlashcards] = useState<Flashcard[]>([]);

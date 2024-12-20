@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { usePets } from "../../hooks/usePets"; // Import your custom hook for fetching pets
 import PetSelectionModal from "./PetSelectionModal";
@@ -66,6 +65,10 @@ import unicornEvol4Eating from '../../assets/pets/unicorn/evolution_4_eating.gif
 import beachBackground from '../../assets/backgrounds/beach_background.gif'
 import hillBackground from '../../assets/backgrounds/hill_background.gif'
 import spaceBackground from '../../assets/backgrounds/space_background.gif'
+import claimBackground from '../../assets/backgrounds/claimed_background.png'
+
+//icons
+import currencyIcon from '../../assets/currency.png'
 
 
 
@@ -140,7 +143,6 @@ const handleFeedPet = async (petData: any) => {
       updatedPet.pet_max_value += 50;
 
       setShowEvolutionCinematic(true); // Trigger evolution cinematic
-
     } else {
       updatedPet.pet_currency -= 100;
       updatedPet.pet_progress_bar = Math.min(updatedPet.pet_progress_bar + 10, 100);
@@ -295,121 +297,163 @@ const handleFeedPet = async (petData: any) => {
 
   const petData = pets.length > 0 ? pets[0] : null;
 
-    return (
-      <div
-        style={{ backgroundImage: `url(${backgrounds[backgroundIndex]})` }}
-        className="w-full h-full rounded-xl border-black flex flex-col bg-cover bg-center transition-all duration-500 px-5"
-      >
-        {petData ? (
-          <>
-            <div className="flex flex-row justify-between">
-              <div>
-                <div className="flex items-center mt-4">
-                  <h1 className="text-5xl font-extrabold mt-4 text-white">
-                    {petData.pet_name}
-                  </h1>
-                  <h2 className="text-sm mt-10 ml-2 text-green-800">
-                    {petData.pet_progress_bar}/{petData.pet_max_value}
-                  </h2>
-                </div>
-                <div className="flex items-center mt-2">
-                  <div className="w-32 h-4 bg-black rounded-full">
+  return (
+    <div
+      style={{
+        backgroundImage: `url(${
+          petData
+            ? backgrounds[backgroundIndex] // Use the current background when pet is claimed
+            : claimBackground // Replace with your default background image URL
+        })`,
+      }}
+      className="w-full h-full rounded-xl border-black flex flex-col bg-cover bg-center transition-all duration-500 px-5"
+    >
+      {petData ? (
+        <>
+          <div className="flex flex-row justify-between">
+            <div>
+              <div className="flex items-center mt-4">
+                <h1 className="text-5xl font-extrabold mt-4 text-white">
+                  {petData.pet_name}
+                </h1>
+                <h2 className="text-sm mt-10 ml-2 text-green-800">
+                  {petData.pet_progress_bar}/{petData.pet_max_value}
+                </h2>
+              </div>
+              <div className="flex items-center">
+                <div className="w-32 h-4 bg-white rounded-full">
                   <div
                     className="h-4 rounded-full"
                     style={{
-                    background: `linear-gradient(to right, #e0e7e7, #b3c1c1, #719191)`,
-                    width: `${petData.pet_progress_bar}%`,
-                      }}
+                      background: `linear-gradient(to right, #b3c1c1, #719191, #4a6464)`,
+                      width: `${petData.pet_progress_bar}%`,
+                    }}
                   ></div>
-
-                  </div>
                 </div>
-                <h2 className="text-lg font-bold">Phase: {petData.pet_evolution_rank}</h2>
               </div>
-              <div className="w-28 h-8 bg-shades-light rounded-xl ml-auto mr-5 mt-5 flex justify-center items-center text-lg font-semibold">
-                {petData.pet_currency}
-              </div>
+              <h2 className="text-lg font-bold">Phase: {petData.pet_evolution_rank}</h2>
             </div>
-            <div className="flex flex-col items-center mt-[8.5rem]">
-              {!showEvolutionCinematic && (
-                <>
-                  {/* Pet Image */}
-                  <img
-                    src={getEvolutionGif(petData.pet_type, petData.pet_evolution_rank)}
-                    alt="Pet"
-                    className="w-10 h-64 md:w-96 md:h-62 object-contain transition-all duration-500"
-                  />
-    
-                  {/* Buttons */}
-                  <div className="flex justify-center space-x-4">
-                    <button
-                      className="relative w-20 h-10 bg-gray-500 text-black font-bold rounded-md border-4 border-black shadow-md 
-                        active:translate-y-1 active:shadow-none transition-transform duration-75"
-                      onClick={() => changeBackground("left")}
-                    >
-                      Left
-                    </button>
-    
-                    <button
-                      className={`relative w-40 h-10 bg-red-600 text-black text-2xl font-bold rounded-md border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] 
-                        active:translate-y-1 active:shadow-[0px_0px_0px_0px_rgba(0,0,0,1)] 
-                        transition-transform duration-75 ${isFeeding ? "opacity-50 cursor-not-allowed" : ""}`}
-                      onClick={() => handleFeedPet(petData)}
-                      disabled={isFeeding}
-                    >
-                      Feed
-                    </button>
-    
-                    <button
-                      className="relative w-20 h-10 bg-gray-500 text-black font-bold rounded-md border-4 border-black shadow-md 
-                        active:translate-y-1 active:shadow-none transition-transform duration-75"
-                      onClick={() => changeBackground("right")}
-                    >
-                      Right
-                    </button>
-                  </div>
-                </>
-              )}
+            <div className="w-24 h-8 bg-shades-light rounded-xl ml-auto mt-5 flex justify-center items-center text-lg font-semibold">
+              <img
+                src={currencyIcon} // Replace with the actual path to your biscuit icon
+                alt="Currency Icon"
+                className="w-16 h-12"
+              />
+              <span>{petData.pet_currency}</span>
             </div>
-
-          </>
-        ) : (
+          </div>
+          <div className="flex flex-col items-center mt-[13rem]">
+            {!showEvolutionCinematic && (
+              <>
+                {/* Pet Image */}
+                <img
+                  src={getEvolutionGif(petData.pet_type, petData.pet_evolution_rank)}
+                  alt="Pet"
+                  className="w-[200px] h-[200px] object-contain transition-all duration-500"
+                />
+  
+                {/* Buttons */}
+                <div className="flex justify-center space-x-4">
+                  {/* Left Arrow Button */}
+                  <button
+                    className="relative w-10 h-10 bg-primary-300 text-black font-bold rounded-md border-4 border-black shadow-md 
+                      active:translate-y-1 active:shadow-none transition-transform duration-75"
+                    onClick={() => changeBackground("left")}
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="w-6 h-6 text-white" // Adjust text color to match the button's background
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M15 19l-7-7 7-7"
+                      />
+                    </svg>
+                  </button>
+  
+                  {/* Feed Button */}
+                  <button
+                    className={`relative w-24 h-10 bg-primary-900 text-white text-2xl font-bold rounded-md border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] 
+                      active:translate-y-1 active:shadow-[0px_0px_0px_0px_rgba(0,0,0,1)] 
+                      transition-transform duration-75 ${isFeeding ? "opacity-50 cursor-not-allowed" : ""}`}
+                    onClick={() => handleFeedPet(petData)}
+                    disabled={isFeeding}
+                  >
+                    Feed
+                  </button>
+  
+                  {/* Right Arrow Button */}
+                  <button
+                    className="relative w-10 h-10 bg-primary-300 text-black font-bold rounded-md border-4 border-black shadow-md 
+                      active:translate-y-1 active:shadow-none transition-transform duration-75"
+                    onClick={() => changeBackground("right")}
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="w-6 h-6 text-white" // Adjust text color to match the button's background
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M9 5l7 7-7 7"
+                      />
+                    </svg>
+                  </button>
+                </div>
+              </>
+            )}
+          </div>
+        </>
+      ) : (
+        <div className="flex justify-center items-center w-full h-full">
+          {/* Claim a Pet Button in the Center */}
           <button
-            className="bg-primary-dark py-2 px-4 text-black rounded-xl"
+            className="bg-gradient-to-r from-[#b3c1c1] to-[#4a6464] py-3 px-6 text-white font-bold text-xl rounded-xl border-4 border-black shadow-lg 
+              hover:scale-105 active:scale-95 transition-all duration-300"
             onClick={handleClaimPet}
           >
             Claim a Pet
           </button>
-        )}
-    
-        {showModal && (
-          <PetSelectionModal
-            onClose={() => setShowModal(false)}
-            onPetAdded={(pet) => {
-              setPets([pet]);
-              onPetAdded(pet);
-              setShowCareMessageModal(true);
-            }}
-          />
-        )}
-    
-        {showCareMessageModal && (
-          <CareMessageModal
-            onClose={() => {
-              setShowCareMessageModal(false);
-              window.location.reload();
-            }}
-          />
-        )}
-    
-        {showEvolutionCinematic && petData && (
-          <CinematicEvolutionModal
-            pet={petData}
-            onClose={() => setShowEvolutionCinematic(false)}
-          />
-        )}
-      </div>
-    );  
+        </div>
+      )}
+  
+      {showModal && (
+        <PetSelectionModal
+          onClose={() => setShowModal(false)}
+          onPetAdded={(pet) => {
+            setPets([pet]);
+            onPetAdded(pet);
+            setShowCareMessageModal(true);
+          }}
+        />
+      )}
+  
+      {showCareMessageModal && (
+        <CareMessageModal
+          onClose={() => {
+            setShowCareMessageModal(false);
+            window.location.reload();
+          }}
+        />
+      )}
+  
+      {showEvolutionCinematic && petData && (
+        <CinematicEvolutionModal
+          pet={petData}
+          onClose={() => setShowEvolutionCinematic(false)}
+        />
+      )}
+    </div>
+  );
 };
 
 export default Pets;

@@ -20,7 +20,6 @@ import { useToDoList } from "../hooks/useToDoList";
 
 // Dashboard page (compact) and ToDolist page (default) display
 import { ToDoListProps } from "../types/ToDoListTypes";
-import sleepingPenguin from "../assets/sleeping_penguin2.gif"
 import React from "react";
 
 const ToDoListComponent: React.FC<ToDoListProps> = ({
@@ -290,20 +289,17 @@ const ToDoListComponent: React.FC<ToDoListProps> = ({
     setEditText("");
   }
 
-  async function saveEditing(task_id: string, due_at: Date) {
+  async function saveEditing(task_id: string) {
     setIsEditing(false);
     cancelEditing();
-    console.log(due_at)
-    console.log(due_at.getTime() == editTaskDateTime().getTime())
+
     if (
       editTaskDateTime() < new Date() &&
-      !(editTime === "--:-- --" && editDate == "mm/dd/yyyy") &&
-      !(due_at.getTime() == editTaskDateTime().getTime())
+      !(editTime === "--:-- --" && editDate == "mm/dd/yyyy")
     ) {
       alert("The due date and time cannot be in the past.");
       return;
     }
-
 
     await saveEditedTask(task_id, editText, editTaskDateTime());
   }
@@ -443,6 +439,7 @@ const ToDoListComponent: React.FC<ToDoListProps> = ({
         <div
           className={`my-3 mb-0 ml-1 mt-[-4rem] flex space-x-2 font-serif font-bold text-[#354F52] scroll-none overflow-hidden`}
         >
+
           <div className="
             absolute flex-wrap
           ">
@@ -486,31 +483,17 @@ const ToDoListComponent: React.FC<ToDoListProps> = ({
                 lg:left-40 lg:top-40 lg:w-[84%] lg:h-[8%]
                 xl:left-40 xl:top-40 xl:w-[90%] xl:h-[9%]
               "
+
             >
               <button
                 type="submit"
-                className="
-                  ml-3 mt-[0.6rem] transform text-black transition-transform
-                  duration-300 hover:scale-110 active:scale-50
-                  sm:ml-4 sm:mt-1 sm:text-2xl
-                  md:ml-4 md:mt-1
-                  lg:ml-4 lg:mt-1
-                  xl:ml- xl:mt-2
-                "
+                className="ml-5 mt-2 transform text-2xl text-black transition-transform duration-300 hover:scale-110 active:scale-50"
               >
                 <SquarePlus size={25} color="#354f52" />
               </button>
 
               <input
-                className="
-                  absolute ml-2 w-[70%] translate-y-[-5px] transform overflow-hidden 
-                  text-ellipsis bg-transparent text-sm text-black outline-none 
-                  text-[0.8rem] top-[2.1rem]
-                  sm:w-[40%] sm:text-base sm:top-[1.6rem]
-                  md:w-[46%] md:text-lg md:top-[1.6rem]
-                  lg:w-[55%] lg:text-lg lg:top-[1.7rem]
-                  xl:w-[60%] xl:text-xl xl:top-[1.7rem]
-                "
+                className="ml-2 w-[46rem] translate-y-[-5px] transform overflow-hidden text-ellipsis bg-transparent text-lg text-black outline-none"
                 style={{ fontFamily: '"Signika Negative", sans-serif' }}
                 type="text "
                 placeholder="Enter a task"
@@ -520,6 +503,7 @@ const ToDoListComponent: React.FC<ToDoListProps> = ({
               />
 
               <label
+
                 className={`
                   absolute outline-none ${time === "--:-- --" ? "pointer-events-none select-none text-transparent" : ""}
                   right-[12.3rem] text-[0.7rem] top-[0.7rem] 
@@ -528,19 +512,13 @@ const ToDoListComponent: React.FC<ToDoListProps> = ({
                   lg:right-[16.6rem] lg:text-[0.8rem] lg:top-[1.6rem]
                   xl:right-[18rem] xl:text-[0.9rem] xl:top-[1.5rem]
                   `}
+
               >
                 {displayTime}
               </label>
 
               <input
-                className="
-                    absolute w-[1.8rem] transform bg-transparent  text-white outline-none transition-transform duration-200 hover:scale-110 sm:hover:scale-125 active:scale-110
-                    right-[10.7rem] top-[0.4rem] scale-75
-                    sm:right-[12.5em] sm:top-[1.4rem] sm:scale-95
-                    md:right-[14.6rem] md:top-[1.4rem] md:scale-100
-                    lg:right-[14.8rem] lg:top-[1.4rem] lg:scale-105
-                    xl:right-[16rem] xl:top-[1.4rem] xl:scale-110
-                  "
+                className="absolute right-[18.9rem] top-[1.4rem] w-[1.8rem] scale-125 transform bg-transparent text-[0.9rem] text-white outline-none transition-transform duration-200 hover:scale-150 active:scale-110"
                 type="time"
                 value={time}
                 onChange={handleTimeChange}
@@ -549,6 +527,7 @@ const ToDoListComponent: React.FC<ToDoListProps> = ({
               <button
                 type="button"
                 onClick={() => setTime("--:-- --")}
+
                 className="
                     duration-400 absolute transform transition-transform hover:scale-110 sm:hover:scale-125 active:rotate-[-360deg]
                     right-[9.5rem] top-[0.5rem] scale-75
@@ -557,11 +536,13 @@ const ToDoListComponent: React.FC<ToDoListProps> = ({
                     lg:right-[13rem] lg:top-[1.5rem] lg:scale-105
                     xl:right-[14.3rem] xl:top-[1.5rem] xl:scale-110
                   "
+
               >
                 <RotateCcw size={20} color="black" />
               </button>
 
               <label
+
                 className={`
                   absolute outline-none ${date === "mm/dd/yyyy" ? "pointer-events-none select-none text-transparent" : ""}
                   right-[3.8rem] text-[0.7rem] top-[0.65rem] 
@@ -570,19 +551,13 @@ const ToDoListComponent: React.FC<ToDoListProps> = ({
                   lg:right-[5.5rem] lg:text-[0.8rem] lg:top-[1.5rem]
                   xl:right-[6rem] xl:text-[0.9rem] xl:top-[1.4rem]
                   `}
+
               >
                 {date.split("-").reverse().join("-")}
               </label>
 
               <input
-                className="
-                    absolute w-[1.55rem] transform bg-transparent text-[1.2rem] outline-none transition-transform duration-200 hover:scale-110 sm:hover:scale-125 active:scale-90
-                    right-[2.2rem] top-[0.2rem] scale-75
-                    sm:right-[3.5rem] sm:top-[1.2rem] sm:scale-95
-                    md:right-[3.5rem] md:top-[1.2rem] md:scale-95
-                    lg:right-[3.5rem] lg:top-[1.2rem] lg:scale-100
-                    xl:right-[4rem] xl:scale-110
-                  "
+                className="absolute right-[6.8rem] top-[1.2rem] w-[1.55rem] transform bg-transparent text-[1.2rem] outline-none transition-transform duration-200 hover:scale-125 active:scale-90"
                 type="date"
                 value={date}
                 onChange={handleDateChange}
@@ -591,14 +566,7 @@ const ToDoListComponent: React.FC<ToDoListProps> = ({
               <button
                 type="button"
                 onClick={() => setDate("mm/dd/yyyy")}
-                className="
-                  duration-400 absolute transform transition-transform hover:scale-110 sm:hover:scale-125 active:rotate-[-360deg]
-                  right-[1rem] top-[0.5rem] scale-75
-                  sm:right-[2rem] sm:top-[1.5rem] sm:scale-95
-                  md:right-[2rem] md:top-[1.5rem] md:scale-95
-                  lg:right-[2rem] lg:top-[1.5rem]  lg:scale-100
-                  xl:right-[2.5rem] xl:scale-110
-                "
+                className="duration-400 absolute right-[5rem] top-[1.5rem] transform text-2xl transition-transform hover:scale-125 active:rotate-[-360deg]"
               >
                 <RotateCcw size={20} color="black" />
               </button>
@@ -606,28 +574,19 @@ const ToDoListComponent: React.FC<ToDoListProps> = ({
           </div>
 
           <div
-            className={` flex space-x-2 font-normal`}
+            className={`my-3 mb-0 ml-8 mt-[-15px] flex space-x-2 font-normal`}
             style={{ fontFamily: '"Signika Negative", sans-serif' }}
           >
             {loading ? (
-                <div className="flex flex-col items-center justify-center h-screen">
-                <h1  className="absolute  text-gray-500
-                   transition-all duration-500 ease-in-out
-                    w-[54%] text-lg
-                    left-[40%] 
-                    sm:left-[45%] sm-text2xl 
-                    md:left-[45%] md:text-2xl
-                    lg:left-[38%] lg:text-3xl
-                    xl:left-[40%] 
-                  ">
-                  Fetching tasks...
-                </h1>
-              </div>
+              <h1 className="mt-[10.5rem] text-center text-2xl text-gray-500">
+                Fetching tasks...
+              </h1>
             ) : display.length === 0 ? (
-              <div className="flex flex-col justify-center h-screen">
+              <>
                 <img
-                  src={sleepingPenguin}
+                  src="src\assets\sleeping_penguin2.gif"
                   alt="No tasks available"
+
                   className={`absolute h-32 w-32 
                     transition-all duration-500 ease-in-out
                     top-[48%]
@@ -655,10 +614,11 @@ const ToDoListComponent: React.FC<ToDoListProps> = ({
                       ? "left-[38%] sm:left-[37%] sm:text-xl md:left-[44%] md:text-2xl lg:left-[37%] lg:text-3xl xl:left-[37%]"
                       : "left-[36%] sm:left-[35%] sm:text-xl md:left-[42%] md:text-2xl lg:left-[34%] lg:text-3xl xl:left-[37%]"}
                   `}
+
                 >
                   {taskMessage}
                 </h1>
-              </div>
+              </>
             ) : null}
 
             <div
@@ -796,7 +756,7 @@ const ToDoListComponent: React.FC<ToDoListProps> = ({
                         </button>
 
                         <button
-                          onClick={() => saveEditing(task.task_id, task.dueAt)}
+                          onClick={() => saveEditing(task.task_id!)}
                           className="absolute right-[7rem] mt-[0rem] transform transition-transform duration-200 hover:scale-125 active:scale-90"
                         >
                           <Save size={20} />
@@ -877,157 +837,149 @@ const ToDoListComponent: React.FC<ToDoListProps> = ({
     );
   } else {
     return (
-      <>
-        <div>
-          <h1>
-            <div
-              style={{ fontFamily: '"Signika Negative", sans-serif' }}
-              className="ml-[1rem] mt-[1rem] text-lg font-bold text-[#354F52]"
-            >
-              My Task
-            </div>
-          </h1>
+  <>
+    <div className="flex flex-col h-full">
+  <h1>
+    <div
+      style={{ fontFamily: '"Signika Negative", sans-serif' }}
+      className="ml-[1rem] mt-[1rem] text-lg font-bold text-[#354F52]"
+    >
+      My Task
+    </div>
+  </h1>
 
-          <div className="mt-[0.8rem] border-b-2"></div>
+  <div className="mt-[0.8rem] border-b-2"></div>
 
-          {loading ? (
-            <>
-              <h1
-                style={{ fontFamily: '"Signika Negative", sans-serif' }}
-                className="fixed left-[23rem] top-[15.5rem] text-center text-2xl text-gray-500"
+  {loading ? (
+    <h1
+      style={{ fontFamily: '"Signika Negative", sans-serif' }}
+      className="fixed left-[23rem] top-[15.5rem] text-center text-2xl text-gray-500"
+    >
+      Fetching tasks...
+    </h1>
+  ) : (
+    <div className="flex flex-1 flex-col">
+      {filterTasks.length === 0 ? (
+        <>
+          <img
+            src="src/assets/sleeping_penguin2.gif"
+            alt="No tasks available"
+            className="mx-auto mt-[2rem] h-[10rem] w-[10rem]"
+          />
+          <div
+            style={{ fontFamily: '"Signika Negative", sans-serif' }}
+            className="mt-[-1rem] text-center text-lg text-gray-500"
+          >
+            No more tasks
+          </div>
+        </>
+      ) : (
+        <ul className="flex-1 overflow-auto">
+          {tasks
+            .filter(
+              (task) =>
+                task.dueAt.getTime() > new Date().getTime() ||
+                task.dueAt.getTime() === new Date(0).getTime()
+            )
+            .sort((a, b) => {
+              if (a.dueAt && b.dueAt) {
+                const now = new Date().getTime();
+                const aDueTime = a.dueAt.getTime();
+                const bDueTime = b.dueAt.getTime();
+                return Math.abs(aDueTime - now) - Math.abs(bDueTime - now);
+              }
+              return 0;
+            })
+            .slice(0, 5)
+            .map((task, index) => (
+              <motion.li
+                key={index}
+                className="mt-[0.6rem] border-b-2"
+                variants={afterloading ? taskVariants : undefined}
+                initial={afterloading ? "hidden" : undefined}
+                animate={afterloading ? "visible" : undefined}
+                exit={afterloading ? "visible" : undefined}
+                transition={
+                  afterloading
+                    ? { duration: 0.2, delay: index * delayPerItem }
+                    : undefined
+                }
               >
-                Fetching tasks...
-              </h1>
-             
-            </> 
-          ) : 
-            filterTasks.length === 0 && (
-              <>
-                <img
-                  src={sleepingPenguin}
-                  alt="No tasks available"
-                  className="mx-auto mt-[2rem] h-[10rem] w-[10rem]"
-                />
-                <div
-                  style={{ fontFamily: '"Signika Negative", sans-serif' }}
-                  className="mt-[-1rem] text-center text-lg text-gray-500"
-                >
-                  No more tasks
-                </div>
-              </>
-            )}
-            <>
-              <ul>
-                {tasks
-                     .filter(task => 
-                      task.dueAt.getTime() > new Date().getTime() ||
-                      task.dueAt.getTime() === new Date(0).getTime()
-                    )
-                    .sort((a, b) => {
-                      if (a.dueAt && b.dueAt) {
-                        const now = new Date().getTime();
-                        const aDueTime = a.dueAt.getTime();
-                        const bDueTime = b.dueAt.getTime();
-                        return Math.abs(aDueTime - now) - Math.abs(bDueTime - now);
-                      }
-                      return 0; 
-                    })
-                  .slice(0, 5)
-                  .map((task, index) => (
-                    <motion.li key={index} className="mt-[0.6rem] border-b-2"
-                    variants={afterloading ? taskVariants : undefined}
-                    initial={afterloading ? "hidden" : undefined}
-                    animate={afterloading ? "visible" : undefined}
-                    exit={afterloading ? "visible" : undefined}
-                    transition={
-                      afterloading
-                        ? { duration: 0.2, delay: index * delayPerItem }
-                        : undefined
-                    }>
-                      <div className="mb-[0.8rem]">
-                        <input
-                          className="peer mb-[0rem] ml-[0.9rem] h-5 w-5 translate-y-[0.1rem] transform cursor-pointer appearance-none rounded-full border-[0.05rem] border-black bg-white shadow-lg transition-transform duration-300 checked:border-[#719191] checked:bg-[#719191] hover:scale-110 active:scale-50"
-                          type="checkbox"
-                          checked={task.completed}
-                          onChange={() => completeToggle(task.task_id!)}
-                          disabled={taskInputDisable === task.task_id && afterMark}
-                        />
-
-                        <span
-                          style={{
-                            fontFamily: '"Signika Negative", sans-serif',
-                          }}
-                          className="absolute ml-3 text-lg font-semibold text-[#354F52]"
-                        >
-                           {task.text.length > 40 ? `${task.text.slice(0, 40)}...` : task.text}
-                        </span>
-                        <span
-                          style={{
-                            fontFamily: '"Signika Negative", sans-serif',
-                            color:
-                               displayStatus(task.dueAt) === "Today"
-                                ? "#10B981"
-                                : displayStatus(task.dueAt) === "Upcoming"
-                                ? "#3B82F6"
-                                : displayStatus(task.dueAt) === "Tomorrow"
-                                ? "#F59E0B"
-                                : "#6B7280"
-                          }}
-                          className={`
-                            ${
-                              displayStatus(task.dueAt) === "Today"
-                                ? "ml-[27.5rem]"
-                                : displayStatus(task.dueAt) === "Upcoming"
-                                ? "ml-[26.5rem]"
-                                : displayStatus(task.dueAt) === "Tomorrow"
-                                ? "ml-[26.5rem]"
-                                : "ml-[27.1rem]"
-                                
-                            } 
-                            font-semibold
-                          `}
-                          >
-                          {displayStatus(task.dueAt)}
-                        </span>
-                      </div>
-                    </motion.li>
-                  ))}
-              </ul>
-              {filterTasks.length > 0 && filterTasks.length <= 4 ? (
-                <>
-                  <div
-                    style={{ fontFamily: '"Signika Negative", sans-serif' }}
-                    className="mt-[0.5rem] text-center text-lg text-gray-500"
+                <div className="flex items-center mb-[0.8rem]">
+                  <input
+                    className="peer mb-[0rem] ml-[0.9rem] h-5 w-5 translate-y-[0.1rem] transform cursor-pointer appearance-none rounded-full border-[0.05rem] border-black bg-white shadow-lg transition-transform duration-300 checked:border-[#719191] checked:bg-[#719191] hover:scale-110 active:scale-50"
+                    type="checkbox"
+                    checked={task.completed}
+                    onChange={() => completeToggle(task.task_id!)}
+                    disabled={taskInputDisable === task.task_id && afterMark}
+                  />
+                  <span
+                    style={{
+                      fontFamily: '"Signika Negative", sans-serif',
+                    }}
+                    className="ml-2 flex-1 text-lg font-semibold text-[#354F52] truncate"
                   >
-                    {" "}
-                    {filterTasks.length === 1
-                      ? "1 more task left"
-                      : `${filterTasks.length} more tasks left`}
-                  </div>
-                </>
-              ): null}
-              
-              <button
-                style={{ fontFamily: '"Signika Negative", sans-serif' }}
-                className="fixed top-[25rem] w-[35rem] rounded-bl-[1.5rem] rounded-br-[1.5rem] bg-[#354F52] py-2 text-white hover:bg-[#52796f]"
-                onClick={() => navigate(`/ToDoList`)}
-              >
-                  {loading ? (
-                  <span>Searching Tasks...</span>
-                  ) : (
-                    <>
-                      {filterTasks.length === 0
-                        ? "Add a Task"
-                        : filterTasks.length > 5
-                        ? `View ${filterTasks.length - 5} more`
-                        : "Add more tasks"}
-                    </>
-                  )}
-              </button>
-            </>
+                    {task.text.length > 40
+                      ? `${task.text.slice(0, 40)}...`
+                      : task.text}
+                  </span>
+                  <span
+                    style={{
+                      fontFamily: '"Signika Negative", sans-serif',
+                      color:
+                        displayStatus(task.dueAt) === "Today"
+                          ? "#10B981"
+                          : displayStatus(task.dueAt) === "Upcoming"
+                          ? "#3B82F6"
+                          : displayStatus(task.dueAt) === "Tomorrow"
+                          ? "#F59E0B"
+                          : "#6B7280",
+                    }}
+                    className="mr-4 text-sm font-semibold"
+                  >
+                    {displayStatus(task.dueAt)}
+                  </span>
+                </div>
+              </motion.li>
+            ))}
+        </ul>
+      )}
+
+      {filterTasks.length > 0 && filterTasks.length <= 4 && (
+        <div
+          style={{ fontFamily: '"Signika Negative", sans-serif' }}
+          className="mt-[0.5rem] text-center text-lg text-gray-500"
+        >
+          {filterTasks.length === 1
+            ? "1 more task left"
+            : `${filterTasks.length} more tasks left`}
         </div>
+      )}
+    </div>
+  )}
+
+  <button
+    style={{ fontFamily: '"Signika Negative", sans-serif' }}
+    className="w-full rounded-bl-[1.5rem] rounded-br-[1.5rem] bg-[#354F52] py-2 text-white hover:bg-[#52796f]"
+    onClick={() => navigate(`/ToDoList`)}
+  >
+    {loading ? (
+      <span>Searching Tasks...</span>
+    ) : (
+      <>
+        {filterTasks.length === 0
+          ? "Add a Task"
+          : filterTasks.length > 5
+          ? `View ${filterTasks.length - 5} more`
+          : "Add more tasks"}
       </>
-    );
+    )}
+  </button>
+</div>
+
+  </>
+);
+
   }
 };
 

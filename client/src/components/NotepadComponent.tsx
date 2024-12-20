@@ -6,7 +6,6 @@ import { v4 as uuidv4 } from "uuid";
 import { useNotepad } from "../hooks/useNotepad";
 import { motion } from "framer-motion";
 import parse from 'html-react-parser';
-import sleepingPenguin from "../assets/sleeping_penguin2.gif"
 
 const NotepadComponent: React.FC = () => {
     const [currentTitle, setCurrentTitle] = useState<string>("");
@@ -181,6 +180,7 @@ const NotepadComponent: React.FC = () => {
 
     const formatContent = (content: string) => {
       // If content is an object, convert it to a string or access the correct property
+      console.log(content)
       if (typeof content === 'object') {
         content = JSON.stringify(content); // or access a specific property like content.text
       }
@@ -327,10 +327,10 @@ const NotepadComponent: React.FC = () => {
                 <h1 className="ml-[36rem] mt-[-4.5rem] text-2xl text-gray-500">
                   Fetching notes...
                 </h1>
-              ) : notes.length == 0  && filteredNotes.length == 0 && (
+              ) : notes.length === 0  || filteredNotes.length === 0 && (
                 <div className="ml-5 mt-4 text-center">
                   <img
-                    src={sleepingPenguin}
+                    src="src\assets\sleeping_penguin2.gif"
                     alt="No notes available"
                     className="ml-[34rem] mt-[-13rem] h-[15rem] w-[15rem]"
                   />
