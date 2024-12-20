@@ -150,7 +150,7 @@ const handleFeedPet = async (petData: any) => {
 
     try {
       await axios.patch(
-        `http://localhost:3002/pets/updatePet/${updatedPet.pet_id}`,
+        `${import.meta.env.VITE_API_URL}/pets/updatePet/${updatedPet.pet_id}`,
         {
           pet_currency: updatedPet.pet_currency,
           pet_progress_bar: updatedPet.pet_progress_bar,

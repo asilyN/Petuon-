@@ -56,9 +56,9 @@ CarmineDB_1.router.post("/insertTask", AuthMiddleware_1.default, ToDoListMiddlew
             return res.status(401).json({ message: "Unauthorized: User ID not found" });
         }
         const query = `
-            INSERT INTO tasks (task_id, text, created_at, due_at, completed, user_id)
-            VALUES ($1, $2, $3, $4, $5, $6)
-            RETURNING *;
+          INSERT INTO tasks (task_id, text, created_at, due_at, completed, user_id)
+          VALUES ($1, $2, $3, $4, $5, $6)
+          RETURNING *;
         `;
         const values = [task_id, text, createdAt, dueAt, completed, userId];
         const result = yield CarmineDB_1.pool.query(query, values);
@@ -101,10 +101,10 @@ CarmineDB_1.router.patch("/completeTask/:task_id", AuthMiddleware_1.default, ToD
             return res.status(404).json({ message: "Task not found or unauthorized" });
         }
         const query = `
-            UPDATE tasks 
-            SET completed = $1
-            WHERE task_id = $2 AND user_id = $3
-            RETURNING *;
+          UPDATE tasks 
+          SET completed = $1
+          WHERE task_id = $2 AND user_id = $3
+          RETURNING *;
         `;
         const values = [completed, task_id, userId];
         const result = yield CarmineDB_1.pool.query(query, values);
@@ -126,8 +126,8 @@ CarmineDB_1.router.patch("/updateTask/:task_id", AuthMiddleware_1.default, ToDoL
             return res.status(401).json({ message: "Unauthorized: User ID not found" });
         }
         const checkQuery = `
-        SELECT * FROM tasks
-        WHERE task_id = $1 AND user_id = $2;
+          SELECT * FROM tasks
+          WHERE task_id = $1 AND user_id = $2;
       `;
         const checkValues = [task_id, userId];
         const checkResult = yield CarmineDB_1.pool.query(checkQuery, checkValues);
@@ -135,10 +135,10 @@ CarmineDB_1.router.patch("/updateTask/:task_id", AuthMiddleware_1.default, ToDoL
             return res.status(404).json({ message: "Task not found or unauthorized" });
         }
         const query = `
-            UPDATE tasks 
-            SET text = $1, due_at = $2 
-            WHERE task_id = $3 AND user_id = $4
-            RETURNING *;
+          UPDATE tasks 
+          SET text = $1, due_at = $2 
+          WHERE task_id = $3 AND user_id = $4
+          RETURNING *;
         `;
         const values = [text, dueAt, task_id, userId];
         const result = yield CarmineDB_1.pool.query(query, values);

@@ -7,10 +7,9 @@ import { Flashcard } from "../../types/FlashCardTypes";
 import axios from "axios";
 import Modal from "../modal";
 
-import sleepingPenguin from "../../assets/sleeping_penguin2.gif"
+
 
 const token = localStorage.getItem('token');
-const pet_id = localStorage.getItem('pet_id');
 
 const FlashcardComponent: React.FC = () => {
   const {
@@ -41,7 +40,6 @@ const FlashcardComponent: React.FC = () => {
 
   const [editingQuestion, setEditingQuestion] = useState<string | null>(null);
   const [editingAnswer, setEditingAnswer] = useState<string | null>(null);
-  const [selectedDeck, setSelectedDeck] = useState<{ deck_id: string; title: string } | null>(null);
 
   const handleEditQuestion = (flashcardId: string) => {
     setEditingQuestion(flashcardId);
@@ -64,7 +62,7 @@ const FlashcardComponent: React.FC = () => {
   const updateFlashcard = async (flashcardId: string, newValue: string, field: "question" | "answer") => {
     try {
       // API call to update the flashcard
-      await axios.put(`http://localhost:3002/cards/updateFlashcard/${flashcardId}`, {
+      await axios.put(`${import.meta.env.VITE_API_URL}/cards/updateFlashcard/${flashcardId}`, {
         [field]: newValue,
       });
 
@@ -83,49 +81,6 @@ const FlashcardComponent: React.FC = () => {
     }
   };
 
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const visibleDecksCount = window.innerWidth < 768 ? 1 : window.innerWidth < 1024 ? 2 : 3; // Adjust the number of visible decks based on screen size
-  const [highlightIndex, setHighlightIndex] = useState(0); // Define highlightIndex state
-
-  const totalGroups = Math.ceil(decks.length / visibleDecksCount); // Total number of groups
-
-  // Get the current set of visible decks based on the `currentIndex` and `visibleDecksCount`
-  const getVisibleDecks = () => {
-    return decks.slice(currentIndex, currentIndex + visibleDecksCount);
-  };
-
-
-  // Update the highlighted deck within the current group
-  const handlePrev = () => {
-    if (highlightIndex > 0) {
-      setHighlightIndex(prevIndex => prevIndex - 1);
-    } else if (currentIndex > 0) {
-      setCurrentIndex(prevIndex => prevIndex - visibleDecksCount);
-      setHighlightIndex(visibleDecksCount - 1);  // Go to the last deck in the previous set
-    }
-  };
-
-  const handleNext = () => {
-    if (highlightIndex < getVisibleDecks().length - 1) {
-      setHighlightIndex(prevIndex => prevIndex + 1);
-    } else if (currentIndex + visibleDecksCount < decks.length) {
-      setCurrentIndex(prevIndex => prevIndex + visibleDecksCount);
-      setHighlightIndex(0);  // Reset to the first deck in the next set
-    }
-  };
-
-  const handleDotClick = (index: number) => {
-    setCurrentIndex(index * visibleDecksCount);  // Clicking a dot will take you to the first deck in that group
-    setHighlightIndex(0);  // Highlight the first deck in the new set
-  };
-
-
-  // Handle selecting a deck (Open the deck in the middle)
-  const handleSelect = (deck: { deck_id: string; title: string }) => {
-    loadDeck(deck.deck_id);
-    setSelectedDeck(deck); // Optionally store the selected deck for further use (e.g., open it in a modal)
-  };
-  
 
   const FlashcardList: React.FC<{ flashcards: Flashcard[] }> = ({ flashcards }) => {
     return (
@@ -252,7 +207,7 @@ const FlashcardComponent: React.FC = () => {
                 onKeyDown={async (e) => {
                   if (e.key === 'Enter') {
                     await saveDeck();
-                    const response = await axios.get(`http://localhost:3002/cards/getDecks`, {
+                    const response = await axios.get(`${import.meta.env.VITE_API_URL}/cards/getDecks`, {
                       headers: {
                         Authorization: `Bearer ${token}`
                       }
@@ -272,7 +227,7 @@ const FlashcardComponent: React.FC = () => {
               <button
                 onClick={async () => {
                   await saveDeck();
-                  const response = await axios.get(`http://localhost:3002/cards/getDecks`, {
+                  const response = await axios.get(`${import.meta.env.VITE_API_URL}/cards/getDecks`, {
                     headers: {
                       Authorization: `Bearer ${token}`
                     }
@@ -486,4 +441,3 @@ const FlashcardComponent: React.FC = () => {
 
 
 export default FlashcardComponent;
-

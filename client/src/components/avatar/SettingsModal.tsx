@@ -25,7 +25,7 @@ const SettingPageModal: React.FC<SettingPageModalProps> = ({ onClose, fetchUserD
     const fetchUserData = async () => {
       setLoading(true)
       try {
-        const response = await axios.get('http://localhost:3002/avatar/getUser', {
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/avatar/getUser`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -87,7 +87,7 @@ const SettingPageModal: React.FC<SettingPageModalProps> = ({ onClose, fetchUserD
     // Check if email has changed
     if (email !== initialEmail) {
       try {
-        const accountExists = await axios.get('http://localhost:3002/editprofile/getUsers', {
+        const accountExists = await axios.get(`${import.meta.env.VITE_API_URL}/editprofile/getUsers`, {
           params: { email },
           headers: {
             Authorization: `Bearer ${token}`,
@@ -115,7 +115,7 @@ const SettingPageModal: React.FC<SettingPageModalProps> = ({ onClose, fetchUserD
 
     // Update user profile
     try {
-      await axios.patch("http://localhost:3002/editprofile/updateUser", data, {
+      await axios.patch(`${import.meta.env.VITE_API_URL}/editprofile/updateUser`, data, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

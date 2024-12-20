@@ -14,6 +14,7 @@ const FlashcardRouter_1 = __importDefault(require("./routes/FlashcardRouter"));
 const NotesListRouter_1 = __importDefault(require("./routes/NotesListRouter"));
 const PetsRouter_1 = __importDefault(require("./routes/PetsRouter"));
 const AvatarRouter_1 = __importDefault(require("./routes/AvatarRouter"));
+const EditProfileRouter_1 = __importDefault(require("./routes/EditProfileRouter"));
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 const PORT = process.env.PORT || 3002;
@@ -28,7 +29,9 @@ app.use('/login', LoginRouter_1.default);
 app.use('/cards', FlashcardRouter_1.default);
 app.use('/pets', PetsRouter_1.default);
 app.use('/avatar', AvatarRouter_1.default);
+app.use('/editprofile', EditProfileRouter_1.default);
 // Start Server on port 3002
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
+exports.default = app;

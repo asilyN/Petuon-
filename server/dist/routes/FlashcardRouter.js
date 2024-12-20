@@ -121,4 +121,93 @@ router.delete('/deleteFlashcard/:unique_flashcard_id', (req, res) => __awaiter(v
         res.status(500).send('Failed to delete flashcard');
     }
 }));
+// Update a deck's title
+router.put('/updateDeckTitle/:deckId', AuthMiddleware_1.default, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
+    const { deckId } = req.params; // Get the deck ID from the URL parameters
+    const { title } = req.body; // Get the new title from the request body
+    const userId = (_a = req.user) === null || _a === void 0 ? void 0 : _a.user_id; // Get the user ID from the authenticated token
+    if (!title || title.trim() === "") {
+        return res.status(400).json({ message: "Title is required and cannot be empty" });
+    }
+    if (!userId) {
+        return res.status(401).json({ message: "Unauthorized: User ID not found" });
+    }
+    try {
+        const query = `
+      UPDATE decks
+      SET title = $1
+      WHERE deck_id = $2 AND user_id = $3
+      RETURNING *`;
+        const values = [title, deckId, userId];
+        const result = yield CarmineDB_1.pool.query(query, values);
+        if (result.rowCount === 0) {
+            return res.status(404).json({ message: "Deck not found or not owned by the user" });
+        }
+        res.status(200).json({ message: "Deck title updated successfully", deck: result.rows[0] });
+    }
+    catch (error) {
+        console.error(`Error updating deck title for deck ID ${deckId}:`, error);
+        res.status(500).send('Internal Server Error');
+    }
+}));
+router.put('/updateFlashcard/:unique_flashcard_id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { unique_flashcard_id } = req.params;
+    const { question, answer } = req.body;
+    // Only update the fields that are provided
+    const updateFields = [];
+    const updateValues = [];
+    if (question) {
+        updateFields.push('question');
+        updateValues.push(question);
+    }
+    if (answer) {
+        updateFields.push('answer');
+        updateValues.push(answer);
+    }
+    if (updateFields.length === 0) {
+        return res.status(400).send("No valid fields provided to update");
+    }
+    const updateQuery = `
+    UPDATE flashcards 
+    SET ${updateFields.map((field, idx) => `${field} = $${idx + 1}`).join(", ")} 
+    WHERE unique_flashcard_id = $${updateFields.length + 1}
+  `;
+    try {
+        yield CarmineDB_1.pool.query(updateQuery, [...updateValues, unique_flashcard_id]);
+        res.status(200).send("Flashcard updated successfully");
+    }
+    catch (error) {
+        console.error("Error updating flashcard:", error);
+        res.status(500).send("Failed to update flashcard");
+    }
+}));
+// Update flashcard progress
+router.put('/updateFlashcardProgress/:unique_flashcard_id', AuthMiddleware_1.default, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { unique_flashcard_id } = req.params;
+    const { progress } = req.body;
+    if (progress === undefined) {
+        return res.status(400).json({ message: "Progress is required" });
+    }
+    try {
+        // Run the query to update the flashcard's progress based on unique_flashcard_id
+        const query = `
+      UPDATE flashcards
+      SET progress = $1
+      WHERE unique_flashcard_id = $2
+      RETURNING *`;
+        const values = [progress, unique_flashcard_id];
+        const result = yield CarmineDB_1.pool.query(query, values);
+        if (result.rowCount === 0) {
+            return res.status(404).json({ message: "Flashcard not found" });
+        }
+        res.status(200).json({ message: "Flashcard progress updated", flashcard: result.rows[0] });
+    }
+    catch (error) {
+        // Log full error for debugging
+        console.error('Error updating flashcard progress:', error);
+        const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+        res.status(500).json({ message: "An error occurred while updating flashcard progress", error: errorMessage });
+    }
+}));
 exports.default = router;

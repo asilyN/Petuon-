@@ -17,7 +17,7 @@ const bcrypt_1 = __importDefault(require("bcrypt"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 // JWT secret
 const JWT_SECRET = process.env.JWT_SECRET || 'Carmine_1';
-// Login route
+// For when user login
 CarmineDB_1.router.post('/userLogin', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { user_name, user_password } = req.body;
     try {

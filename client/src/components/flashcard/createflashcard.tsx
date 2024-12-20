@@ -47,7 +47,7 @@ export const CreateFlashcard: React.FC<CreateFlashcardProps> = ({ flashcards, se
           question, answer, flashcard_id, unique_flashcard_id,
           progress: false
         };
-        const response = await axios.post('http://localhost:3002/cards/insertCard', flashcardData);
+        const response = await axios.post(`${import.meta.env.VITE_API_URL}/cards/insertCard`, flashcardData);
         console.log(`Flashcard created: id: ${flashcard_id}, uniqueId: ${unique_flashcard_id}`, response);
       } catch (error) {
         console.error('Error creating flashcard:', error);

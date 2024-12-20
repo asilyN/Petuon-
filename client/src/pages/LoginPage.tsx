@@ -11,7 +11,7 @@ import smBG from '../assets/Bg_sm.png';
 import smBG1 from '../assets/Bg_sm1.png';
 import mdBG from '../assets/Bg_md.png';
 import lgBG from '../assets/Bg_lg.png';
-import LogInBG from '../assets/LogInBG.png';
+import LogInBG from '../assets/LoginBg.png';
 
 const getBackgroundImage = (width: number) => {
   if (width >= 1280) return `url(${LogInBG})`;
@@ -56,7 +56,7 @@ const LoginPage: React.FC<Props> = () => {
   const handleLogin = async (form: LoginFormsInputs) => {
     setLoading(true)
     try {
-        const response = await axios.post("http://localhost:3002/login/userLogin", {
+        const response = await axios.post(`${import.meta.env.VITE_API_URL}/login/userLogin`, {
           user_name: form.user_name,
           user_password: form.user_password,
         });

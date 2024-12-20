@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Bell, User, Moon, Settings } from "lucide-react";
+import {User, Moon, Settings } from "lucide-react";
 import axios from "axios";
 import { useNavigate } from 'react-router-dom';
 import LogInOut from "./logInOutComponent";
@@ -23,7 +23,7 @@ const Avatar = () => {
 
   const fetchUserData = async () => {
     try {
-      const response = await axios.get("http://localhost:3002/avatar/getUser", {
+      const response = await axios.get(`${import.meta.env.VITE_API_URL}/avatar/getUser`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

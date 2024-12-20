@@ -19,6 +19,13 @@ const RegisterMiddleware_1 = require("../middleware/RegisterMiddleware");
 CarmineDB_1.router.post('/registerUser', RegisterMiddleware_1.ValidateRegister, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { user_password, user_id, user_email, user_name } = req.body;
     try {
+        // Check if the email already exists
+        const checkQuery = `SELECT user_email FROM users WHERE user_email = $1`;
+        const checkResult = yield CarmineDB_1.pool.query(checkQuery, [user_email]);
+        if (checkResult.rows.length > 0) {
+            // Email already exists
+            return res.status(400).json({ message: 'Email is already registered' });
+        }
         const saltRounds = 10;
         const hashedPassword = yield bcrypt_1.default.hash(user_password, saltRounds);
         const query = `

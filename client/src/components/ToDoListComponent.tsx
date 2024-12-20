@@ -41,7 +41,7 @@ const ToDoListComponent: React.FC<ToDoListProps> = ({
 
   const lastTaskRef = useRef<HTMLLIElement | null>(null);
   
-  const [isAnimatingDropDown, setIsAnimatingDropDown] =
+  const [isAnimatingDropDown] =
     useState<boolean>(false); //para sa dropdown animation
   const colors = ["#FE9B72", "#FFC973", "#E5EE91", "#B692FE"];
 
@@ -151,18 +151,6 @@ const ToDoListComponent: React.FC<ToDoListProps> = ({
       alert("Cannot set time in current or past");
       return;
     }
-
-    // setIsAnimatingDropDown(true);
-    // setTimeout(() => {
-    //   setIsAnimatingDropDown(false);
-    // }, 10); // dropdown duration
-
-    // if (lastTaskRef.current) {
-    //   lastTaskRef.current.scrollIntoView({
-    //     behavior: "smooth",
-    //     block: "end",
-    //   });
-    // }
 
     setTask(""); // resets the value of the Task
     setDate("mm/dd/yyyy"); // resets the value of the Date

@@ -11,7 +11,7 @@ export const useNotepad= () => {
     const fetchNotes = async () => {
         setLoading(true)
         try {
-            const response = await axios.get("http://localhost:3002/notes/getNotes", 
+            const response = await axios.get(`${import.meta.env.VITE_API_URL}/notes/getNotes`, 
             {
                 headers: {
                     Authorization: `Bearer ${token}`
@@ -52,7 +52,7 @@ export const useNotepad= () => {
           }
         
         const response = await axios.post(
-            `http://localhost:3002/notes/insertNote`,
+            `${import.meta.env.VITE_API_URL}/notes/insertNote`,
             newNote,
             {
                 headers: {
@@ -72,7 +72,7 @@ export const useNotepad= () => {
           }
         
         await axios.patch(
-            `http://localhost:3002/notes/updateNote/${editingNote}`,
+            `${import.meta.env.VITE_API_URL}/notes/updateNote/${editingNote}`,
             newNote,
             {
               headers: {
@@ -86,7 +86,7 @@ export const useNotepad= () => {
     // Deleting Note
     const deleteNOte = async (note_id: string) => {
         setNotes((prevNotes) => prevNotes.filter((note) => note.note_id !== note_id));
-        await axios.delete(`http://localhost:3002/notes/deleteNote/${note_id}`, {
+        await axios.delete(`${import.meta.env.VITE_API_URL}/notes/deleteNote/${note_id}`, {
             headers: {
                 Authorization: `Bearer ${token}`
             }
