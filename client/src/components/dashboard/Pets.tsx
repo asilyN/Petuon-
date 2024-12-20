@@ -331,7 +331,7 @@ const handleFeedPet = async (petData: any) => {
                   ></div>
                 </div>
               </div>
-              <h2 className="text-lg font-bold">Phase: {petData.pet_evolution_rank}</h2>
+              <h2 className="text-xl font-bold text-primary-500 bg-primary-100 mt-1 rounded-3xl flex justify-center">Phase: {petData.pet_evolution_rank}</h2>
             </div>
             <div className="w-24 h-8 bg-shades-light rounded-xl ml-auto mt-5 flex justify-center items-center text-lg font-semibold">
               <img
