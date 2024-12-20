@@ -67,89 +67,97 @@ const CalendarComponent: React.FC = () => {
   };
 
   const renderHeader = () => (
-    <div className="mb-3 flex items-center justify-between">
-      <button
-        onClick={prevMonth}
-        className="ml-[29rem] mt-[-7rem] flex items-center justify-center rounded-full p-2 text-[#354F52] transition-all duration-300 hover:bg-[#52796f]"
-      >
-        <ChevronLeft size={24} />
-      </button>
+    <div className="mb-8 sm:mb-4 flex items-center justify-between">
+    
+  {/* Previous Month Button */}
+  <button
+    onClick={prevMonth}
+    className="flex items-center justify-center rounded-full p-2 text-[#354F52] transition-all -mt-[2rem] ml-duration-300 hover:bg-[#52796f] sm:ml-[15rem] sm:-mt-[7rem] md:ml-[15rem] lg:ml-[14rem] xl:ml-[25rem]"
+  >
+    <ChevronLeft size={24} />
+  </button>
 
-      <div
-        className="relative mt-[-7rem] transform cursor-pointer font-serif text-4xl font-bold text-[#354F52] transition-transform duration-200 hover:scale-105"
-        onClick={toggleDropdown}
-      >
-        <span>{format(currentMonth, "MMMM yyyy")}</span>
-        {dropdownVisible && (
-          <div className="absolute left-1/2 z-10 mt-1 w-[800px] -translate-x-1/2 transform rounded-md bg-white bg-opacity-100 p-4 shadow-lg">
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <h3
+  {/* Month and Year Selector */}
+  <div
+    className="relative cursor-pointer font-serif text-2xl -mt-[2rem] font-bold text-[#354F52] transition-transform duration-200 hover:scale-105 md:text-3xl lg:text-4xl sm:-mt-[7rem]"
+    onClick={toggleDropdown}
+  >
+    <span>{format(currentMonth, "MMMM yyyy")}</span>
+    {dropdownVisible && (
+      <div className="absolute left-1/2 z-10 mt-2 w-[120%] max-w-[800px] -translate-x-1/2 transform rounded-md bg-white bg-opacity-100 p-4 shadow-lg">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+          {/* Month Selection */}
+          <div>
+            <h3
+              style={{ fontFamily: '"Signika Negative", sans-serif' }}
+              className="text-lg font-semibold"
+            >
+              Select Month
+            </h3>
+            <div className="mt-2 grid grid-cols-2 gap-2">
+              {[
+                "January",
+                "February",
+                "March",
+                "April",
+                "May",
+                "June",
+                "July",
+                "August",
+                "September",
+                "October",
+                "November",
+                "December",
+              ].map((month, index) => (
+                <button
+                  key={index}
+                  onClick={() => handleMonthChange(index)}
                   style={{ fontFamily: '"Signika Negative", sans-serif' }}
-                  className="text-lg"
+                  className="rounded-md p-2 text-sm transition-colors hover:bg-[#354F52] hover:text-white"
                 >
-                  Select Month
-                </h3>
-                <div className="mt-2 grid grid-cols-3 gap-2">
-                  {[
-                    "January",
-                    "February",
-                    "March",
-                    "April",
-                    "May",
-                    "June",
-                    "July",
-                    "August",
-                    "September",
-                    "October",
-                    "November",
-                    "December",
-                  ].map((month, index) => (
-                    <button
-                      key={index}
-                      onClick={() => handleMonthChange(index)}
-                      style={{ fontFamily: '"Signika Negative", sans-serif' }}
-                      className="rounded-md p-2 text-sm transition-colors hover:bg-[#354F52] hover:text-white"
-                    >
-                      {month}
-                    </button>
-                  ))}
-                </div>
-              </div>
-              <div>
-                <h3
-                  style={{ fontFamily: '"Signika Negative", sans-serif' }}
-                  className="text-lg font-semibold"
-                >
-                  Select Year
-                </h3>
-                <div className="mt-2 max-h-64 overflow-y-auto">
-                  {[...Array(21)].map((_, idx) => {
-                    const year = selectedYear + idx - 10; // Showing 10 years before and 10 years after current year
-                    return (
-                      <button
-                        key={year}
-                        onClick={() => handleYearChange(year)}
-                        style={{ fontFamily: '"Signika Negative", sans-serif' }}
-                        className="block w-full rounded-md p-2 text-left text-sm transition-colors hover:bg-[#354F52] hover:text-white"
-                      >
-                        {year}
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
+                  {month}
+                </button>
+              ))}
             </div>
           </div>
-        )}
+          {/* Year Selection */}
+          <div>
+            <h3
+              style={{ fontFamily: '"Signika Negative", sans-serif' }}
+              className="text-lg font-semibold"
+            >
+              Select Year
+            </h3>
+            <div className="mt-2 max-h-64 overflow-y-auto">
+              {[...Array(21)].map((_, idx) => {
+                const year = selectedYear + idx - 10; // Showing 10 years before and 10 years after current year
+                return (
+                  <button
+                    key={year}
+                    onClick={() => handleYearChange(year)}
+                    style={{ fontFamily: '"Signika Negative", sans-serif' }}
+                    className="block w-full rounded-md p-2 text-left text-sm transition-colors hover:bg-[#354F52] hover:text-white"
+                  >
+                    {year}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        </div>
       </div>
-      <button
-        onClick={nextMonth}
-        className="mr-[29rem] mt-[-7rem] flex items-center justify-center rounded-full p-2 text-[#354F52] transition-all duration-300 hover:bg-[#52796f]"
-      >
-        <ChevronRight size={24} />
-      </button>
-    </div>
+    )}
+  </div>
+
+  {/* Next Month Button */}
+  <button
+    onClick={nextMonth}
+    className="flex items-center justify-center rounded-full p-2 text-[#354F52] -mt-[2rem] transition-all duration-300 hover:bg-[#52796f] sm:mr-[5rem] sm:-mt-[7rem] md:mr-[5rem] lg:mr-[14rem] xl:mr-[25rem]"
+  >
+    <ChevronRight size={24} />
+  </button>
+</div>
+
   );
 
   const renderDaysOfWeek = () => (

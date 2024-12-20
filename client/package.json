@@ -7,9 +7,11 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "start": "vite preview --host"
   },
   "dependencies": {
+    "@emailjs/browser": "^4.4.1",
     "@hookform/resolvers": "^3.9.1",
     "@supabase/auth-ui-react": "^0.4.7",
     "@supabase/auth-ui-shared": "^0.1.8",
@@ -17,6 +19,7 @@
     "axios": "^1.7.7",
     "date-fns": "^4.1.0",
     "dotenv": "^16.4.5",
+    "emailjs-com": "^3.2.0",
     "framer-motion": "^11.13.0",
     "html-react-parser": "^5.2.0",
     "jsonwebtoken": "^9.0.2",

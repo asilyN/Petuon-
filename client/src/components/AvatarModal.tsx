@@ -73,9 +73,16 @@ const Avatar = () => {
       )}
    
       {/* Top-right section for Bell and Profile */}
-      <div className="fixed right-12 top-9 hidden items-center space-x-4 lg:flex z-50">
+      <div className="
+      fixed 
+      right-[1rem] top-9
+      sm:right-[2rem] sm:top-9
+      lg:right-12 lg:top-9 
+      xl:right-12 xl:top-9
+      items-center space-x-4 lg:flex z-50"
+      >
         {/* Bell Icon */}
-        <Bell className="h-8 w-8 cursor-pointer text-[#354F52]" />
+     
         {/* Profile Icon with Dropdown */}
         <div className="relative">
           {/* Profile Icon (clickable) */}
@@ -95,7 +102,12 @@ const Avatar = () => {
           )} 
           {/* Dropdown Menu */}
           {isDropdownOpen && (
-            <div className="absolute right-0 top-12 w-56 rounded-lg border bg-white shadow-lg">
+            <div className="
+            absolute
+            right-0 top-12 
+            w-56 
+            rounded-lg border bg-white shadow-lg
+            ">
               {/* Profile Section */}
               <div className="flex items-center border-b p-4">
                 <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-300 text-[#354F52]">

@@ -7,13 +7,13 @@ import "react-quill/dist/quill.snow.css";
 
 const NotepadPage = () => {
   return (
-    <>
+    <div>
       <WhiteContainer>
         <NotepadComponent/>
         <Avatar />
       </WhiteContainer>
       <SideBar />
-    </>
+    </div>
   );
 };
 

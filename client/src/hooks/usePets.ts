@@ -13,35 +13,46 @@ export const usePets = () => {
   // Fetch Pets
   const fetchPets = async () => {
     setError(""); // Clear previous errors
-    setHasPet(true)
-    setLoading(true)
+    setHasPet(true);
+    setLoading(true);
     try {
+      console.log("Fetching pets...");
       const response = await axios.get("http://localhost:3002/pets/getPets", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-      // Assuming the response data is an array of pet objects
-      const petsWithDateTime: Pet[] = response.data.map((pet: any) => ({
-        pet_id: pet.pet_id, // Assuming pet_id exists in response
-        pet_type: pet.pet_type, // Assuming pet_type exists in response
-        pet_name: pet.pet_name, // Assuming pet_name exists in response
-        pet_currency: pet.pet_currency || 0, // Default to 0 if not available
-        pet_progress_bar: pet.pet_progress_bar || 0, // Default to 0 if not available
-        pet_evolution_rank: pet.pet_evolution_rank || 1, // Default to 1 if not available
-        pet_max_value: pet.pet_max_value || 150, // Default to 150 if not available
-        created_date: pet.created_date || new Date().toISOString().split("T")[0], // Default current date if not available
-        created_time: pet.created_time || new Date().toTimeString().split(" ")[0], // Default current time if not available
-      }));
-      // Set the fetched data into state
-      setPets(petsWithDateTime);
-      setHasPet(response.data.length > 0);
+
+      console.log("API response:", response.data);
+
+      if (response.data && response.data.length > 0) {
+        localStorage.setItem("pet_id", response.data[0].pet_id); // fetch pet id and store in local storage
+
+        // Assuming the response data is an array of pet objects
+        const petsWithDateTime: Pet[] = response.data.map((pet: any) => ({
+          pet_id: pet.pet_id, // Assuming pet_id exists in response
+          pet_type: pet.pet_type, // Assuming pet_type exists in response
+          pet_name: pet.pet_name, // Assuming pet_name exists in response
+          pet_currency: pet.pet_currency || 0, // Default to 0 if not available
+          pet_progress_bar: pet.pet_progress_bar || 0, // Default to 0 if not available
+          pet_evolution_rank: pet.pet_evolution_rank || 1, // Default to 1 if not available
+          pet_max_value: pet.pet_max_value || 150, // Default to 150 if not available
+          created_date: pet.created_date || new Date().toISOString().split("T")[0], // Default current date if not available
+          created_time: pet.created_time || new Date().toTimeString().split(" ")[0], // Default current time if not available
+        }));
+        // Set the fetched data into state
+        setPets(petsWithDateTime);
+        setHasPet(true);
+      } else {
+        setHasPet(false);
+        console.warn("No pets found for the user.");
+      }
     } catch (error: any) {
       console.error("Error fetching pets:", error);
       setError("Failed to fetch pets. Please try again later.");
-      setHasPet(false)
+      setHasPet(false);
     } finally {
-      setLoading(false)
+      setLoading(false);
       setAfterLoading(true); // End loading
     }
   };

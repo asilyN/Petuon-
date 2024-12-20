@@ -18,11 +18,14 @@
   },
   "type": "module",
   "dependencies": {
+    "@emailjs/browser": "^4.4.1",
+    "framer-motion": "^11.15.0",
     "html-react-parser": "^5.2.0",
     "prop-types": "^15.8.1",
     "react": "^18.3.1",
     "react-confetti": "^6.1.0",
     "react-dom": "^18.3.1",
+    "react-spinners": "^0.15.0",
     "react-use": "^17.5.1"
   }
 }

@@ -149,7 +149,7 @@ const DeckProgress: React.FC = () => {
             {progressItems.slice(0, 2).map((item, index) => (
               <div
                 key={index}
-                className="bg-gray-100 rounded-lg p-3 mt-[-8.4rem] ml-[7rem] scale-95 w-[25rem]"
+                className="bg-gray-100 rounded-lg p-3 mt-[-8.4rem] ml-[5rem] sm:ml-[7rem] scale-95 w-[12rem] sm:w-[25rem]"
               >
                 <div className="flex items-center justify-between">
                   <div>

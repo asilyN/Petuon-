@@ -117,7 +117,7 @@ const CinematicEvolutionModal: React.FC<CinematicEvolutionModalProps> = ({ pet, 
             <img
               src={getEvolutionGif(pet.pet_type, pet.pet_evolution_rank)} // Evolved pet image
               alt="Evolved Pet"
-              className="w-32 h-32 object-contain transition-opacity duration-3000 opacity-0 fade-in"
+              className="w-32 h-32 object-contain transition-opacity duration-3000 opacity-1 fade-in"
             />
           )}
         </div>

@@ -15,6 +15,7 @@ export const QuizFlashcard: React.FC<quizFlashcardProps> = ({ setOnFirstPage, fl
   const [showAnswer, setShowAnswer] = useState(false);
   const [quizState, setQuizState] = useState<"review" | "fillBlanks" | "finished">("review");
   const [userScore, setUserScore] = useState(0);
+  const [petCurrency, setPetCurrency] = useState(0); // New state variable
   const [attempts, setAttempts] = useState(3);
   const [answerStatus, setAnswerStatus] = useState<"correct" | "incorrect" | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -46,9 +47,7 @@ export const QuizFlashcard: React.FC<quizFlashcardProps> = ({ setOnFirstPage, fl
     setTempFlashcards(shuffled);
     setCurrentIndex(0);
     setShowAnswer(false);
-    // setQuizFinished(false);
   };
-
 
   const handlePreviousFlashcard = () => {
     if (currentIndex > 0) {
@@ -82,6 +81,7 @@ export const QuizFlashcard: React.FC<quizFlashcardProps> = ({ setOnFirstPage, fl
       setUserScore((prev) => prev + 1);
       setAnswerStatus("correct");
       await updateProgress(tempFlashcards[currentIndex].unique_flashcard_id);
+      await updatePetCurrency(5); // Will gonna add 5 pet currency for correct answer
       handleNextFlashcard();
     } else {
       setAttempts((prev) => prev - 1);
@@ -117,6 +117,33 @@ export const QuizFlashcard: React.FC<quizFlashcardProps> = ({ setOnFirstPage, fl
     }
   };
 
+  const updatePetCurrency = async (amount: number) => {
+    try {
+      const token = localStorage.getItem("token");
+      const pet_id = localStorage.getItem("pet_id");
+      if (!token || !pet_id) throw new Error("No token or pet id found");
+
+      const response = await axios.patch(
+        `http://localhost:3002/pets/updatePetCurrency`,
+        {
+          pet_currency: amount,
+          pet_id
+         },
+        { headers:
+          {
+            Authorization: `Bearer ${token}`
+          }
+        }
+      );
+
+      if (response.status !== 200) {
+        console.error("Unexpected response status", response.status);
+      }
+    } catch (error) {
+      console.error("Failed to update pet currency", error);
+    }
+  };
+
   const currentFlashcard = tempFlashcards[currentIndex];
   const isQuizComplete = quizState === "finished";
 
@@ -148,6 +175,7 @@ export const QuizFlashcard: React.FC<quizFlashcardProps> = ({ setOnFirstPage, fl
                 : "Loading..."}
             </h2>
           </div>
+
           <button
                onClick={() => setQuizState("review")}
                 style={{ fontFamily: '"Signika Negative", sans-serif' }}
@@ -155,6 +183,7 @@ export const QuizFlashcard: React.FC<quizFlashcardProps> = ({ setOnFirstPage, fl
               >
                 Review
             </button>
+
           <div className="mt-5 flex items-center space-x-2">
             <div
               className={`transition-transform ${
@@ -193,7 +222,6 @@ export const QuizFlashcard: React.FC<quizFlashcardProps> = ({ setOnFirstPage, fl
               </span>
             </div>
         </div>
-
       ) : isQuizComplete ? (
         <div className="flex flex-col items-center">
           {/* Quiz Completion UI */}

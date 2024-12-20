@@ -10,6 +10,7 @@ import Modal from "../modal";
 import sleepingPenguin from "../../assets/sleeping_penguin2.gif"
 
 const token = localStorage.getItem('token');
+const pet_id = localStorage.getItem('pet_id');
 
 const FlashcardComponent: React.FC = () => {
   const {
@@ -40,6 +41,7 @@ const FlashcardComponent: React.FC = () => {
 
   const [editingQuestion, setEditingQuestion] = useState<string | null>(null);
   const [editingAnswer, setEditingAnswer] = useState<string | null>(null);
+  const [selectedDeck, setSelectedDeck] = useState<{ deck_id: string; title: string } | null>(null);
 
   const handleEditQuestion = (flashcardId: string) => {
     setEditingQuestion(flashcardId);
@@ -342,6 +344,7 @@ const FlashcardComponent: React.FC = () => {
                 </div>
               ) : null}
 
+
               {/* Render Decks */}
               {!loadDecks && Object.keys(decks).length > 0 &&
                 decks.map((deck, index) => {
@@ -504,6 +507,3 @@ const FlashcardComponent: React.FC = () => {
 
 export default FlashcardComponent;
 
-function setSelectedDeck(deck: { deck_id: string; title: string; }) {
-  throw new Error("Function not implemented.");
-}
