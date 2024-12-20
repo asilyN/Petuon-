@@ -26,6 +26,7 @@ const LoginPage: React.FC<Props> = () => {
           user_name: form.user_name,
           user_password: form.user_password,
         });
+      
         if (response.data.token) {
           // Store JWT token in localStorage for persistent sessions
           localStorage.setItem("token", response.data.token);

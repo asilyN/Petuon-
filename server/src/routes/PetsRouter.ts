@@ -177,6 +177,49 @@ router.patch("/updatePet/:pet_id", authenticateToken, async (req: Request, res: 
   }
 });
 
+router.patch('/updatePetCurrency', authenticateToken, async (req: Request, res: Response) => {
+  try {
+    const { pet_currency, pet_id } = req.body;
+
+    if (pet_currency == null) {
+      return res.status(400).json({ message: "Pet currency is required." });
+    }
+
+    // Fetch the current pet data to ensure it exists
+    const petResult = await pool.query(
+      "SELECT * FROM pets WHERE pet_id = $1",
+      [pet_id]
+    );
+
+    if (petResult.rowCount === 0) {
+      return res.status(404).json({ message: "Pet not found." });
+    }
+
+    const newPetCurrency = petResult.rows[0].pet_currency + pet_currency;
+
+    const query = `
+      UPDATE pets 
+      SET pet_currency = $1, updated_date = $2
+      WHERE pet_id = $3
+      RETURNING *;
+    `;
+
+    const values = [newPetCurrency, new Date().toISOString(), pet_id];
+
+    const result = await pool.query(query, values);
+
+    if (result.rowCount === 0) {
+      return res.status(404).json({ message: "Pet not found." });
+    }
+
+    return res.status(200).json({ message: "Pet currency updated successfully.", pet: result.rows[0] });
+  } catch (error) {
+    console.error("Error updating pet currency:", error);
+    return res.status(500).json({ message: "Internal server error." });
+  }
+});
+
+
 
 
 
