@@ -91,7 +91,7 @@ const RegisterPage: React.FC = () => {
         backgroundImage: `url(${bgImage})`, // Apply dynamic background based on state
       }}
     >
-      <div className="mx-auto flex flex-col items-center justify-center px-6 py-8 lg:py-0 md:mr-[5rem] lg:mr-[3rem] xl:mr-[3rem]">
+      <div className="mx-auto flex flex-col items-center justify-center px-6 py-8 lg:py-0 md:ml-[12rem] md:mt-20 lg:ml-[50rem]">
         <div
           className="w-full rounded-lg shadow md:max-w-md lg:max-w-lg xl:max-w-2xl"
           style={{ backgroundColor: "rgba(88, 85, 85, 0.285)" }}
@@ -105,7 +105,7 @@ const RegisterPage: React.FC = () => {
             </h1>
             <p
               style={{ fontFamily: '"Signika Negative", sans-serif' }}
-              className="text-md text-white"
+              className="text-sm text-white"
             >
               Ready to learn smarter? Set up your account and unlock a world of study support!
             </p>
