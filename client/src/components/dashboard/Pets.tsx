@@ -288,7 +288,7 @@ const handleFeedPet = async (petData: any) => {
   };
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <div className="flex justify-center items-center w-full h-full text-3xl">Loading...</div>;
   }
 
   if (error) {
@@ -317,7 +317,7 @@ const handleFeedPet = async (petData: any) => {
                   {petData.pet_name}
                 </h1>
                 <h2 className="text-sm mt-10 ml-2 text-green-800">
-                  {petData.pet_progress_bar}/{petData.pet_max_value}
+                  {petData.pet_progress_bar}/100
                 </h2>
               </div>
               <div className="flex items-center">

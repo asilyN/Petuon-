@@ -5,7 +5,7 @@ const CareMessageModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
   const slides = [
     {
       title: "Pet Evolution",
-      content: "Your pet is at its 1st evolution rank. It can evolve further if you feed it and fill its growth bar.",
+      content: "Your pet is at its 1st evolution rank. It can evolve further if you feed it and over-fill its growth bar.",
     },
     {
       title: "Earn Coins with Flashcards",

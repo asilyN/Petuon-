@@ -44,22 +44,21 @@ const CinematicEvolutionModal: React.FC<CinematicEvolutionModalProps> = ({ pet, 
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      setShowOldPet(true); // Show the previous pet after 2 seconds
-      setModalText("Your pet is evolving..."); // Update text when showing old pet
+      setShowOldPet(true); // Show the previous pet after a delay
+      setModalText("Your pet is evolving...");
       setTimeout(() => {
-        setFadeOutOldPet(true); // Start fading out old pet after it becomes visible
+        setFadeOutOldPet(true); // Start fading out old pet
         setTimeout(() => {
           setShowPet(true); // Show evolved pet after old pet fades out
           setShowOldPet(false); // Remove old pet once evolved pet is shown
-          setModalText("Your pet has evolved!"); // Update text when evolved pet is displayed
-        }, 3000); // Wait for 3 seconds before starting the fade out animation
-      }, 3000); // Wait for 3 seconds before starting the fade out animation
-    }, 1000); // Initial delay of 2 seconds before showing the previous pet
+          setModalText("Your pet has evolved!");
+        }, 3000); // Wait for 3 seconds to complete fade out
+      }, 3000); // Wait for 3 seconds before starting the fade-out animation
+    }, 1000); // Initial delay before showing the previous pet
 
     return () => clearTimeout(timer);
   }, []);
 
-  // Function to return the appropriate evolution image/GIF based on pet type and evolution rank
   const getEvolutionGif = (petType: string, evolutionRank: number): string => {
     switch (petType) {
       case 'capybara':
@@ -100,28 +99,26 @@ const CinematicEvolutionModal: React.FC<CinematicEvolutionModalProps> = ({ pet, 
   return (
     <div className="fixed top-0 left-0 right-0 bottom-0 flex justify-center items-center bg-black bg-opacity-50 z-50">
       <div className="bg-white p-5 rounded-lg shadow-lg w-96 h-96 flex flex-col justify-center items-center">
-        {/* Updated text */}
         <h2 className="text-xl font-bold text-center mb-4">{modalText}</h2>
         <div className="flex justify-center mb-4">
-          {/* Old Pet - Fading in after 2 seconds */}
           {showOldPet && (
             <img
-              src={getEvolutionGif(pet.pet_type, pet.pet_evolution_rank - 1)} // Show previous evolution rank
+              src={getEvolutionGif(pet.pet_type, pet.pet_evolution_rank - 1)}
               alt="Old Pet"
-              className={`w-32 h-32 object-contain transition-opacity duration-3000 ${fadeOutOldPet ? "opacity-0" : "opacity-100"}`}
+              className={`w-32 h-32 object-contain transition-opacity duration-3000 ${
+                fadeOutOldPet ? "opacity-0" : "opacity-100"
+              }`}
             />
           )}
-
-          {/* New Evolved Pet - Fading in */}
           {showPet && (
             <img
-              src={getEvolutionGif(pet.pet_type, pet.pet_evolution_rank)} // Evolved pet image
+              src={getEvolutionGif(pet.pet_type, pet.pet_evolution_rank)}
               alt="Evolved Pet"
-              className="w-32 h-32 object-contain transition-opacity duration-3000 opacity-1 fade-in"
+              className="w-32 h-32 object-contain fade-in"
+              style={{ animation: "fadeIn 3s forwards" }}
             />
           )}
         </div>
-        {/* Conditionally render button after the evolved pet appears */}
         {showPet && (
           <button
             className="bg-primary-dark py-2 px-4 text-primary-500 rounded-xl w-full"
@@ -131,6 +128,19 @@ const CinematicEvolutionModal: React.FC<CinematicEvolutionModalProps> = ({ pet, 
           </button>
         )}
       </div>
+      <style>{`
+        @keyframes fadeIn {
+          from {
+            opacity: 0;
+          }
+          to {
+            opacity: 1;
+          }
+        }
+        .fade-in {
+          animation: fadeIn 3s forwards;
+        }
+      `}</style>
     </div>
   );
 };
