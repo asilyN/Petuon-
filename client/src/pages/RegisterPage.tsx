@@ -91,9 +91,9 @@ const RegisterPage: React.FC = () => {
         backgroundImage: `url(${bgImage})`, // Apply dynamic background based on state
       }}
     >
-      <div className="mx-auto flex flex-col items-center justify-center px-6 py-8 lg:py-0 md:ml-[12rem] md:mt-20 lg:ml-[50rem]">
+      <div className="mx-auto flex flex-col items-center justify-center px-6 py-8 lg:py-0 md:ml-[12rem] md:mt-20 lg:ml-[55rem] lg:mt-[2rem]">
         <div
-          className="w-full rounded-lg shadow md:max-w-md lg:max-w-lg xl:max-w-2xl"
+          className="w-full rounded-lg shadow md:max-w-md lg:max-w-md "
           style={{ backgroundColor: "rgba(88, 85, 85, 0.285)" }}
         >
           <div className="space-y-6 p-6 sm:p-8 md:space-y-8 lg:p-12">
