@@ -317,7 +317,7 @@ const FlashcardComponent: React.FC = () => {
             </button>
             </Modal>
           </div>
-          <div className="w-[100vw] flex items-center justify-center relative md:ml-[2.5rem] xl:ml-0 mt-[-1.5rem] overflow-y-auto pt-0">
+          <div className="w-[100vw] min-h-[400px] flex items-center justify-center relative md:ml-[2.5rem] xl:ml-0 mt-[-1.5rem] overflow-y-auto pt-0">
             <ul className="mt-24 w-full lg:w-[80%] xl:w-[90%] ml-[3rem] xl:ml-[7rem] pl-5 md:pr-10 lg:pr-5 xl:pr-10 md:pl-2 xl:pl-0 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 md:gap-x-1 lg:gap-x-2 xl:gap-x-0 max-h-[540px] overflow-y-scroll overflow-x-hidden p-2 pb-14 [&::-webkit-scrollbar]:w-0">
               {/* Loading State */}
               {loadDecks ? (
@@ -325,19 +325,19 @@ const FlashcardComponent: React.FC = () => {
                   Fetching cards...
                 </p>
               ) : Object.keys(decks).length === 0 ? (
-                <div className="flex flex-col items-center justify-center w-full h-[350px] absolute top-5 left-0">
+                <div className="flex flex-col items-center justify-center w-full h-[95%] absolute top-5 left-0">
                   <img
                     src={sleepingPenguin}
                     alt="No tasks available"
-                    className="h-full z-100"
+                    className="h-[200px] ml-[5rem]"
                   />
                   <h1
-                    className="text-gray-500 text-lg sm:text-xl md:text-2xl lg:text-3xl text-center"
+                    className="text-gray-500 text-lg sm:text-xl md:text-2xl lg:text-3xl text-center ml-[6rem]"
                     style={{
                       fontFamily: '"Signika Negative", sans-serif',
                     }}
                   >
-                    No Decks
+                    No Decks found. Create one to get started!
                   </h1>
                 </div>
               ) : null}
