@@ -353,7 +353,7 @@ const handleFeedPet = async (petData: any) => {
                 />
   
                 {/* Buttons */}
-                <div className="flex justify-center space-x-16">
+                <div className="flex justify-center space-x-4">
                   {/* Left Arrow Button */}
                   <button
                     className="relative w-10 h-10 bg-primary-300 text-black font-bold rounded-md border-4 border-black shadow-md 

@@ -780,25 +780,27 @@ const ToDoListComponent: React.FC<ToDoListProps> = ({
     return (
   <>
     <div className="flex flex-col h-full">
-      <h1>
-        <div
-          style={{ fontFamily: '"Signika Negative", sans-serif' }}
-          className="ml-[1rem] mt-[1rem] text-lg font-bold text-[#354F52]"
-        >
-          My Task
-        </div>
-      </h1>
+  <h1>
+    <div
+      style={{ fontFamily: '"Signika Negative", sans-serif' }}
+      className="ml-[1rem] mt-[1rem] text-lg font-bold text-[#354F52]"
+    >
+      My Task
+    </div>
+  </h1>
 
-      <div className="mt-[0.8rem] border-b-2"></div>
+  <div className="mt-[0.8rem] border-b-2"></div>
 
-      {loading ? (
-        <h1
-          style={{ fontFamily: '"Signika Negative", sans-serif' }}
-          className="fixed left-[23rem] top-[15.5rem] text-center text-2xl text-gray-500"
-        >
-          Fetching tasks...
-        </h1>
-      ) : filterTasks.length === 0 ? (
+  {loading ? (
+    <h1
+      style={{ fontFamily: '"Signika Negative", sans-serif' }}
+      className="fixed left-[23rem] top-[15.5rem] text-center text-2xl text-gray-500"
+    >
+      Fetching tasks...
+    </h1>
+  ) : (
+    <div className="flex flex-1 flex-col">
+      {filterTasks.length === 0 ? (
         <>
           <img
             src="src/assets/sleeping_penguin2.gif"
@@ -832,88 +834,90 @@ const ToDoListComponent: React.FC<ToDoListProps> = ({
             .slice(0, 5)
             .map((task, index) => (
               <motion.li
-  key={index}
-  className="mt-[0.6rem] border-b-2"
-  variants={afterloading ? taskVariants : undefined}
-  initial={afterloading ? "hidden" : undefined}
-  animate={afterloading ? "visible" : undefined}
-  exit={afterloading ? "visible" : undefined}
-  transition={
-    afterloading
-      ? { duration: 0.2, delay: index * delayPerItem }
-      : undefined
-  }
->
-  <div className="flex items-center mb-[0.8rem]">
-    <input
-      className="peer mb-[0rem] ml-[0.9rem] h-5 w-5 translate-y-[0.1rem] transform cursor-pointer appearance-none rounded-full border-[0.05rem] border-black bg-white shadow-lg transition-transform duration-300 checked:border-[#719191] checked:bg-[#719191] hover:scale-110 active:scale-50"
-      type="checkbox"
-      checked={task.completed}
-      onChange={() => completeToggle(task.task_id!)}
-      disabled={taskInputDisable === task.task_id && afterMark}
-    />
-    <span
-      style={{
-        fontFamily: '"Signika Negative", sans-serif',
-      }}
-      className="ml-2 flex-1 text-lg font-semibold text-[#354F52] truncate"
-    >
-      {task.text.length > 40 ? `${task.text.slice(0, 40)}...` : task.text}
-    </span>
-    {/* Status moved to the left with margin */}
-    <span
-      style={{
-        fontFamily: '"Signika Negative", sans-serif',
-        color:
-          displayStatus(task.dueAt) === "Today"
-            ? "#10B981"
-            : displayStatus(task.dueAt) === "Upcoming"
-            ? "#3B82F6"
-            : displayStatus(task.dueAt) === "Tomorrow"
-            ? "#F59E0B"
-            : "#6B7280",
-      }}
-      className="mr-4 text-sm font-semibold"
-    >
-      {displayStatus(task.dueAt)}
-    </span>
-  </div>
-</motion.li>
-
+                key={index}
+                className="mt-[0.6rem] border-b-2"
+                variants={afterloading ? taskVariants : undefined}
+                initial={afterloading ? "hidden" : undefined}
+                animate={afterloading ? "visible" : undefined}
+                exit={afterloading ? "visible" : undefined}
+                transition={
+                  afterloading
+                    ? { duration: 0.2, delay: index * delayPerItem }
+                    : undefined
+                }
+              >
+                <div className="flex items-center mb-[0.8rem]">
+                  <input
+                    className="peer mb-[0rem] ml-[0.9rem] h-5 w-5 translate-y-[0.1rem] transform cursor-pointer appearance-none rounded-full border-[0.05rem] border-black bg-white shadow-lg transition-transform duration-300 checked:border-[#719191] checked:bg-[#719191] hover:scale-110 active:scale-50"
+                    type="checkbox"
+                    checked={task.completed}
+                    onChange={() => completeToggle(task.task_id!)}
+                    disabled={taskInputDisable === task.task_id && afterMark}
+                  />
+                  <span
+                    style={{
+                      fontFamily: '"Signika Negative", sans-serif',
+                    }}
+                    className="ml-2 flex-1 text-lg font-semibold text-[#354F52] truncate"
+                  >
+                    {task.text.length > 40
+                      ? `${task.text.slice(0, 40)}...`
+                      : task.text}
+                  </span>
+                  <span
+                    style={{
+                      fontFamily: '"Signika Negative", sans-serif',
+                      color:
+                        displayStatus(task.dueAt) === "Today"
+                          ? "#10B981"
+                          : displayStatus(task.dueAt) === "Upcoming"
+                          ? "#3B82F6"
+                          : displayStatus(task.dueAt) === "Tomorrow"
+                          ? "#F59E0B"
+                          : "#6B7280",
+                    }}
+                    className="mr-4 text-sm font-semibold"
+                  >
+                    {displayStatus(task.dueAt)}
+                  </span>
+                </div>
+              </motion.li>
             ))}
         </ul>
       )}
 
-      <div className="flex flex-col items-center justify-end mt-2">
-        {filterTasks.length > 0 && filterTasks.length <= 4 && (
-          <div
-            style={{ fontFamily: '"Signika Negative", sans-serif' }}
-            className="mt-[0.5rem] text-center text-lg text-gray-500"
-          >
-            {filterTasks.length === 1
-              ? "1 more task left"
-              : `${filterTasks.length} more tasks left`}
-          </div>
-        )}
-        <button
+      {filterTasks.length > 0 && filterTasks.length <= 4 && (
+        <div
           style={{ fontFamily: '"Signika Negative", sans-serif' }}
-          className="mt-auto w-full rounded-bl-[1.5rem] rounded-br-[1.5rem] bg-[#354F52] py-2 text-white hover:bg-[#52796f]"
-          onClick={() => navigate(`/ToDoList`)}
+          className="mt-[0.5rem] text-center text-lg text-gray-500"
         >
-          {loading ? (
-            <span>Searching Tasks...</span>
-          ) : (
-            <>
-              {filterTasks.length === 0
-                ? "Add a Task"
-                : filterTasks.length > 5
-                ? `View ${filterTasks.length - 5} more`
-                : "Add more tasks"}
-            </>
-          )}
-        </button>
-      </div>
+          {filterTasks.length === 1
+            ? "1 more task left"
+            : `${filterTasks.length} more tasks left`}
+        </div>
+      )}
     </div>
+  )}
+
+  <button
+    style={{ fontFamily: '"Signika Negative", sans-serif' }}
+    className="w-full rounded-bl-[1.5rem] rounded-br-[1.5rem] bg-[#354F52] py-2 text-white hover:bg-[#52796f]"
+    onClick={() => navigate(`/ToDoList`)}
+  >
+    {loading ? (
+      <span>Searching Tasks...</span>
+    ) : (
+      <>
+        {filterTasks.length === 0
+          ? "Add a Task"
+          : filterTasks.length > 5
+          ? `View ${filterTasks.length - 5} more`
+          : "Add more tasks"}
+      </>
+    )}
+  </button>
+</div>
+
   </>
 );
 

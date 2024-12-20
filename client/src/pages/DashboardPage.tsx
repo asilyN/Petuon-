@@ -27,13 +27,13 @@ const DashboardPage = () => {
         </h1>
         <div className="flex flex-col gap-y-6 md:grid md:grid-cols-1 lg:grid lg:grid-cols-[2fr_2.5fr] lg:gap-6 p-4 mb-6">
           {/* Column for My Task and Progress */}
-          <div className="flex flex-col gap-y-6 lg:grid lg:grid-rows-[auto_auto] lg:gap-6">
+          <div className="flex flex-col lg:grid lg:grid-rows-[auto_auto] lg:gap-6">
             <div className="w-full h-[21.5rem] bg-white rounded-[1.5rem] shadow-lg">
               <ToDoListComponent variant="compact" />
             </div>
             <div
               style={{ fontFamily: '"Signika Negative", sans-serif' }}
-              className="font-bold text-[#354F52] p-3 bg-white w-full h-[14rem] rounded-[1.5rem] text-xl shadow-lg"
+              className="font-bold text-[#354F52] p-3 bg-white w-full h-[14rem] rounded-[1.5rem] text-xl shadow-lg mt-8 lg:mt-0"
             >
               Progress
             </div>
