@@ -319,25 +319,28 @@ const FlashcardComponent: React.FC = () => {
             <div className="relative w-full flex items-center justify-center flex-col">
 
             {loadDecks && (
-              <h1 className="mt-[-1.5rem] text-[1.5rem] text-gray-500 font-normal" style={{ fontFamily: '"Signika Negative", sans-serif' }}>
-              Fetching Decks...
-              </h1>
-            )}
-            
-            {decks.length === 0 && !loadDecks ? (
-              <div className="flex flex-col items-center mt-4 ml-[3rem]">
-                <img
-                  src={sleepingPenguin}
-                  alt="No decks available"
-                  className="h-[15rem] w-[15rem]"
-                />
-                <p
+                <h1
+                  className="mt-[-1.5rem] text-[1.5rem] text-gray-500 font-normal"
                   style={{ fontFamily: '"Signika Negative", sans-serif' }}
-                  className="-mt-5 text-2xl text-gray-500"
                 >
-                  No Decks Available
-                </p>
-              </div>
+                  Fetching Decks...
+                </h1>
+              )}
+              
+              {decks.length === 0 && !loadDecks ? (
+                <div className="flex flex-col items-center mt-4 ml-[3rem]">
+                  <img
+                    src={sleepingPenguin}
+                    alt="No decks available"
+                    className="h-[15rem] w-[15rem]"
+                  />
+                  <p
+                    style={{ fontFamily: '"Signika Negative", sans-serif' }}
+                    className="-mt-5 text-2xl text-gray-500"
+                  >
+                    No Decks Available
+                  </p>
+                </div>
             ) : (
               <>
                 {/* Visible Decks */}

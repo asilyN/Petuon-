@@ -1,9 +1,9 @@
 import { Request, Response, NextFunction } from 'express';
 import { pool } from '../database/CarmineDB'
 
-export const ValidateRegister =  async (req: Request, res: Response, next: NextFunction) => {
+export const ValidateRegister = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const {user_email, user_name, user_password } = req.body;
+        const { user_email, user_name, user_password } = req.body;
                 
         if (!user_email || !user_name || !user_password) {
             return res.status(400).json({ error: 'All fields are required.' });

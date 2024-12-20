@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 
+import LandingPage from './pages/LandingPage';
 import Dashboard from '../src/pages/DashboardPage';
 import Calendar from '../src/pages/CalendarPage';
 import Flashcard from '../src/pages/FlashCardPage';
@@ -9,64 +10,64 @@ import Notepad from '../src/pages/NotepadPage';
 import LoginPage from '../src/pages/LoginPage';
 import RegisterPage from '../src/pages/RegisterPage';
 
-import UserRouter from "./UserRoute"
+import UserRoute from './UserRoute';
 
 const RoutesComponent: React.FC = () => {
   return (
     <Router>
-    <Routes>
-      {/* Redirect root to login page */}
-      <Route path="/" element={<Navigate to="/login" replace/>} />
+      <Routes>
+        {/* Landing Page Route */}
+        <Route path="/" element={<LandingPage />} />
 
-      {/* Public Routes */}
-      <Route path="/login" element={<LoginPage />} />
-      <Route path="/register" element={<RegisterPage />} />
+        {/* Public Routes */}
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
 
-      {/* Protected Routes */}
-      <Route
-        path="/dashboard"
-        element={
-          <UserRouter>
-            <Dashboard />
-          </UserRouter>
-        }
-      />
-      <Route
-        path="/calendar"
-        element={
-          <UserRouter>
-            <Calendar />
-          </UserRouter>
-        }
-      />
-      <Route
-        path="/flashcard"
-        element={
-          <UserRouter>
-            <Flashcard />
-          </UserRouter>
-        }
-      />
-      <Route
-        path="/todolist"
-        element={
-          <UserRouter>
-            <ToDoList />
-          </UserRouter>
-        }
-      />
-      <Route
-        path="/notepad"
-        element={
-          <UserRouter>
-            <Notepad />
-          </UserRouter>
-        }
-      />
+        {/* Protected Routes */}
+        <Route
+          path="/dashboard"
+          element={
+            <UserRoute>
+              <Dashboard />
+            </UserRoute>
+          }
+        />
+        <Route
+          path="/calendar"
+          element={
+            <UserRoute>
+              <Calendar />
+            </UserRoute>
+          }
+        />
+        <Route
+          path="/flashcard"
+          element={
+            <UserRoute>
+              <Flashcard />
+            </UserRoute>
+          }
+        />
+        <Route
+          path="/todolist"
+          element={
+            <UserRoute>
+              <ToDoList />
+            </UserRoute>
+          }
+        />
+        <Route
+          path="/notepad"
+          element={
+            <UserRoute>
+              <Notepad />
+            </UserRoute>
+          }
+        />
 
-      {/* Catch-all Route for invalid paths */}
-      <Route path="*" element={<Navigate to="/login" />} />
-    </Routes>
+        {/* Catch-all Route for invalid paths */}
+        <Route path="*" element={<Navigate to="/" />} />
+      </Routes>
     </Router>
   );
 };

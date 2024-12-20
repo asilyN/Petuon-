@@ -206,34 +206,29 @@ const NotepadComponent: React.FC = () => {
         <div className="my-3 mb-0 mt-[-15px] flex space-x-2 font-serif font-bold text-[#354F52]">
           <button
             onClick={() => setFilter("All")}
-            className={`rounded-md px-4 py-2 ${filter === "All" ? "bg-[#657F83] font-serif font-bold text-white" : "bg-none"} hover:scale-110`}
+            className={`rounded-md px-4 py-2 ${filter === "All" ? "bg-[#657F83] font-serif font-bold text-white text-xs  left-[35%] sm:left-[30%] sm:text-xs md:left-[40%] md:text-sm lg:left-[32%] lg:text-xl xl:left-[35%]" : "bg-none"} hover:scale-110`}
           >
             All
           </button>
           <button
             onClick={() => setFilter("Today")}
-            className={`rounded-md px-4 py-2 ${filter === "Today" ? "bg-[#657F83] font-serif font-bold text-white" : "bg-none"} hover:scale-110`}
+            className={`rounded-md px-4 py-2 ${filter === "Today" ? "bg-[#657F83] font-serif font-bold text-white text-xs  left-[35%] sm:left-[30%] sm:text-xs md:left-[40%] md:text-sm lg:left-[32%] lg:text-xl xl:left-[35%]" : "bg-none"} hover:scale-110`}
           >
             Today
           </button>
           <button
             onClick={() => setFilter("Yesterday")}
-            className={`rounded-md px-4 py-2 ${filter === "Yesterday" ? "bg-[#657F83] font-serif font-bold text-white" : "bg-none"} hover:scale-110`}
+            className={`rounded-md px-4 py-2 ${filter === "Yesterday" ? "bg-[#657F83] font-serif font-bold text-white text-xs  left-[35%] sm:left-[30%] sm:text-xs md:left-[40%] md:text-sm lg:left-[32%] lg:text-xl xl:left-[35%]" : "bg-none"} hover:scale-110`}
           >
             Yesterday
           </button>
           <button
             onClick={() => setFilter("This Week")}
-            className={`rounded-md px-4 py-2 ${filter === "This Week" ? "bg-[#657F83] font-serif font-bold text-white" : "bg-none"} hover:scale-110`}
+            className={`rounded-md px-4 py-2 ${filter === "This Week" ? "bg-[#657F83] font-serif font-bold text-white text-xs  left-[35%] sm:left-[30%] sm:text-xs md:left-[40%] md:text-sm lg:left-[32%] lg:text-xl xl:left-[35%]" : "bg-none"} hover:scale-110`}
           >
             This Week
           </button>
-          <button
-            onClick={() => setFilter("This Month")}
-            className={`rounded-md px-4 py-2 ${filter === "This Month" ? "bg-[#657F83] font-serif font-bold text-white" : "bg-none"} hover:scale-110`}
-          >
-            This Month
-          </button>
+          
         </div>
       )}
 
@@ -306,125 +301,130 @@ const NotepadComponent: React.FC = () => {
         </div>
       ) : (
         /* Notes List */
-        <div className="-ml-6 mt-0">
-          <div className="-mt-2 overflow-x-auto p-6">
-            <div className="grid w-max grid-flow-col grid-rows-[repeat(2,minmax(0,1fr))] gap-x-5 gap-y-2"  
-            style={{ fontFamily: '"Signika Negative", sans-serif' }}>
-              {/* New Note Button */}
-              <div
-                className="active:scale-20, mb-2 flex transform cursor-pointer flex-col items-center justify-center rounded-3xl border shadow-lg transition-transform duration-200 hover:scale-105 hover:shadow-xl"
-                onClick={() => setCreatingNewNote(true)}
+        <div className="-ml-6 mt-0 ">
+        <div className="-mt-2 p-6 ">
+          <div
+            className="grid w-full grid-cols-1 ml-[15%] sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 sm:ml-1 md:ml-1 lg:ml-1 xl:ml-1 gap-x-5 gap-y-7"
+            style={{ fontFamily: '"Signika Negative", sans-serif', maxHeight: '80vh', overflowY: 'auto' }}
+          >
+            {/* New Note Button */}
+            <div
+              className="active:scale-20 mb-2 flex transform cursor-pointer flex-col items-center justify-center rounded-3xl border shadow-lg transition-transform duration-200 hover:scale-105 hover:shadow-xl"
+              onClick={() => setCreatingNewNote(true)}
+              style={{
+                width: "16rem", // Set consistent width
+                minHeight: "16rem", // Set consistent height
+                backgroundColor: "#F9F9F9",
+              }}
+            >
+              <FilePlus size={90} className="mb-2 text-[#354F52]" />
+            </div>
+              
+            {loading ? (
+            <h1 className="ml-[36rem] mt-[-4.5rem] text-2xl text-gray-500">
+              Fetching notes...
+            </h1>
+          ) : notes.length == 0 && filteredNotes.length == 0 && (
+            <div
+              className="absolute mt-[12rem] sm:mt-[10rem] md:mt-[5rem] xl:-ml-[4rem]  left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 flex flex-col items-center justify-center pointer-events-none"
+              style={{ zIndex: 10 }}
+            >
+              <img
+                src={sleepingPenguin}
+                alt="No tasks available"
+                className={`h-52 w-52 transition-all duration-500 ease-in-out`}
+              />
+              <p
+                style={{ fontFamily: '"Signika Negative", sans-serif' }}
+                className="-mt-5 text-lg text-gray-500 sm:text-2xl md:text-2xl lg:text-2xl xl:text-2xl"
+              >
+                No notes available.
+              </p>
+            </div>
+
+          )}
+            {filteredNotes.map((note, index) => (
+              <motion.div
+                key={note.note_id}
+                className="active:scale-20 relative mb-2 transform cursor-pointer rounded-3xl border shadow-lg transition-transform duration-200 hover:scale-105 hover:shadow-xl"
                 style={{
                   width: "16rem", // Set consistent width
                   minHeight: "16rem", // Set consistent height
-                  backgroundColor: "#F9F9F9",
+                  backgroundColor: note.color,
                 }}
-                //add icon
+                onClick={() => handleNoteClick(note)}
+                variants={afterLoading ? taskVariants : undefined}
+                initial={afterLoading ? "hidden" : { y: 0 }}
+                animate={afterLoading ? "visible" : undefined}
+                exit={afterLoading ? "visible" : undefined}
+                transition={
+                  afterLoading
+                    ? { duration: 0.2, delay: index * delayPerItem }
+                    : undefined
+                }
               >
-                <FilePlus size={90} className="mb-2 text-[#354F52]" />
-              </div>
-              {loading ? (
-                <h1 className="ml-[36rem] mt-[-4.5rem] text-2xl text-gray-500">
-                  Fetching notes...
-                </h1>
-              ) : notes.length == 0  && filteredNotes.length == 0 && (
-                <div className="ml-5 mt-4 text-center">
-                  <img
-                    src={sleepingPenguin}
-                    alt="No notes available"
-                    className="ml-[34rem] mt-[-13rem] h-[15rem] w-[15rem]"
-                  />
-                  <p
-                    style={{ fontFamily: '"Signika Negative", sans-serif' }}
-                    className="ml-[36rem] mt-[-1.5rem] text-2xl text-gray-500"
-                  >
-                    No notes available.
-                  </p>
-                </div>
-              )}
-
-              {filteredNotes.map((note, index) => (
-                <motion.div
-                  key={note.note_id}
-                  className="active:scale-20 relative mb-2 transform cursor-pointer rounded-3xl border shadow-lg transition-transform duration-200 hover:scale-105 hover:shadow-xl"
-                  style={{
-                    width: "16rem", // Set consistent width
-                    minHeight: "16rem", // Set consistent height
-                    backgroundColor: note.color,
-                  }}
-                  onClick={() => handleNoteClick(note)}
-                  variants={afterLoading ? taskVariants : undefined}
-                  initial={afterLoading ? "hidden" : { y: 0 }}
-                  animate={afterLoading ? "visible" : undefined}
-                  exit={afterLoading ? "visible" : undefined}
-                  transition={
-                    afterLoading
-                      ? { duration: 0.2, delay: index * delayPerItem }
-                      : undefined
-                  }
+                <h4
+                  style={{ fontFamily: '"Signika Negative", sans-serif' }}
+                  className="text-black-500 ml-3 mt-3 text-xs"
                 >
-                  <h4
-                    style={{ fontFamily: '"Signika Negative", sans-serif' }}
-                    className="text-black-500 ml-3 mt-3 text-xs"
-                  >
-                    {new Date(note.created_date).toLocaleDateString()}
-                  </h4>
-                  <h3
-                    style={{ fontFamily: '"Signika Negative", sans-serif' }}
-                    className="mb-1 ml-3 text-xl font-bold uppercase"
-                  >
-                    {note.title.length > 14
-                      ? `${note.title.slice(0, 14)}...`
-                      : note.title}
-                  </h3>
-                  <hr className="mb-2 w-full border-t-2 border-black" />
-                  <p
-                    style={{
-                      fontFamily: '"Signika Negative", sans-serif',
-                      maxHeight: '30rem', // Set a max height for the paragraph
-                      overflow: 'hidden', // Hide overflowing content
-                      textOverflow: 'ellipsis', // Show ellipsis if content overflows
-                      display: '-webkit-box',
-                      WebkitBoxOrient: 'vertical',
-                      WebkitLineClamp: 6, // Limit the content to 2 lines
-                    }}
-                    className="ml-3 text-gray-700"
-                  >
-                    {note.content && note.content.includes('http') ? (
-                      // If content is a URL, render as plain text
-                      note.content
-                    ) : (
-                      // Otherwise, render normally
-                      formatContent(note.content)
-                    )}
-                  </p>
-                  <p
-                    style={{ fontFamily: '"Signika Negative", sans-serif' }}
-                    className="text-black-500 absolute bottom-3 left-5 font-serif text-xs"
-                  >
-                    {new Date(`1970-01-01T${note.created_time}`).toLocaleTimeString(
-                      [],
-                      {
-                        hour: "2-digit",
-                        minute: "2-digit",
-                        hour12: true,
-                      }
-                    )}
-                  </p>
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      editNote(note.note_id);
-                    }}
-                    className="absolute right-3 top-7 text-black hover:text-[#719191]"
-                  >
-                    <FilePen size={20} />
-                  </button>
-                </motion.div>
-              ))}
-            </div>
+                  {new Date(note.created_date).toLocaleDateString()}
+                </h4>
+                <h3
+                  style={{ fontFamily: '"Signika Negative", sans-serif' }}
+                  className="mb-1 ml-3 text-xl font-bold uppercase"
+                >
+                  {note.title.length > 14
+                    ? `${note.title.slice(0, 14)}...`
+                    : note.title}
+                </h3>
+                <hr className="mb-2 w-full border-t-2 border-black" />
+                <p
+                  style={{
+                    fontFamily: '"Signika Negative", sans-serif',
+                    maxHeight: '30rem', // Set a max height for the paragraph
+                    overflow: 'hidden', // Hide overflowing content
+                    textOverflow: 'ellipsis', // Show ellipsis if content overflows
+                    display: '-webkit-box',
+                    WebkitBoxOrient: 'vertical',
+                    WebkitLineClamp: 6, // Limit the content to 2 lines
+                  }}
+                  className="ml-3 text-gray-700"
+                >
+                  {note.content && note.content.includes('http') ? (
+                    // If content is a URL, render as plain text
+                    note.content
+                  ) : (
+                    // Otherwise, render normally
+                    formatContent(note.content)
+                  )}
+                </p>
+                <p
+                  style={{ fontFamily: '"Signika Negative", sans-serif' }}
+                  className="text-black-500 absolute bottom-3 left-5 font-serif text-xs"
+                >
+                  {new Date(`1970-01-01T${note.created_time}`).toLocaleTimeString(
+                    [],
+                    {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                      hour12: true,
+                    }
+                  )}
+                </p>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    editNote(note.note_id);
+                  }}
+                  className="absolute right-3 top-7 text-black hover:text-[#719191]"
+                >
+                  <FilePen size={20} />
+                </button>
+              </motion.div>
+            ))}
           </div>
         </div>
+      </div>
       )}
     </>
   );
