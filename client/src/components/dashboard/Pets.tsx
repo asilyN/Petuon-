@@ -138,9 +138,6 @@ const handleFeedPet = async (petData: any) => {
     if (updatedPet.pet_progress_bar >= 100) {
       updatedPet.pet_progress_bar = 0; // Reset progress bar
       updatedPet.pet_evolution_rank += 1; // Update evolution rank here
-      
-      // Increase max value required to fill the progress bar by 50 after each evolution
-      updatedPet.pet_max_value += 50;
 
       setShowEvolutionCinematic(true); // Trigger evolution cinematic
     } else {
