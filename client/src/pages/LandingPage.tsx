@@ -334,21 +334,21 @@ const LandingPage: React.FC = () => {
               role: "PO / Development Team",
               image: nelImage,
               description:
-                "Nelissa focuses on back-end development, ensuring our app is fast and secure.",
+                "A dedicated frontend developer with some backend skills, known for being hardworking, kind, and collaborative.",
             },
             {
               name: "Dainz Andrei Trasadas",
               role: "Scrum Master",
               image: dainzImage,
               description:
-                "Dainz keeps the team organized and ensures we meet our sprint goals.",
+                "A full-stack developer with a 'skibidi sigma' mindset and an excellent Scrum Master, focused on excellence and team leadership.",
             },
             {
               name: "Elmor John Cortez",
               role: "Development Team",
               image: ejImage,
               description:
-                "Elmor is a front-end specialist with a passion for creating smooth user experiences.",
+                "A versatile developer skilled in both frontend and backend, with impressive technical abilities and a confident, stylish approach.",
             },
 
 
@@ -397,21 +397,21 @@ const LandingPage: React.FC = () => {
               role: "Development Team",
               image: floydImage,
               description:
-                "Floyd specializes in database management and optimizing app performance.",
+                "A full-stack developer who fuels team energy, delivers, and inspires consistent excellence.",
             },
             {
               name: "Nicholae Sara",
               role: "Development Team",
               image: nikImage,
               description:
-                "Nicholae is a versatile developer who contributes to both front-end and back-end tasks.",
+                "A full-stack developer proficient in both frontend and backend",
             },
             {
               name: "Les Paul Capanas",
               role: "Development Team",
               image: paulImage,
               description:
-                "This member specializes in UI/UX design, ensuring the app looks modern and is user-friendly.",
+                "A backend expert specializing in database management, ensuring smooth and efficient system operations.",
             },
           ].map((member) => (
             <div

@@ -158,7 +158,7 @@ const LoginPage: React.FC<Props> = () => {
                   Don’t have an account yet?{" "}
                   <Link
                     to="/register"
-                    className="text-primary-600 dark:text-primary-500 font-medium hover:underline"
+                    className="text-primary-600 text-white font-medium hover:underline"
                   >
                     Sign up
                   </Link>

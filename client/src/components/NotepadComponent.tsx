@@ -309,7 +309,7 @@ const NotepadComponent: React.FC = () => {
           >
             {/* New Note Button */}
             <div
-              className="active:scale-20 mb-2 flex transform cursor-pointer flex-col items-center justify-center rounded-3xl border shadow-lg transition-transform duration-200 hover:scale-105 hover:shadow-xl"
+              className="active:scale-20 mb-2 ml-[5%] sm:ml-0 flex transform cursor-pointer flex-col items-center justify-center rounded-3xl border shadow-lg transition-transform duration-200 hover:scale-105 hover:shadow-xl"
               onClick={() => setCreatingNewNote(true)}
               style={{
                 width: "16rem", // Set consistent width
@@ -321,10 +321,21 @@ const NotepadComponent: React.FC = () => {
             </div>
               
             {loading ? (
-            <h1 className="ml-[36rem] mt-[-4.5rem] text-2xl text-gray-500">
-              Fetching notes...
-            </h1>
-          ) : notes.length == 0 && filteredNotes.length == 0 && (
+              <div className="fixed flex flex-col items-center justify-center h-screen">
+              <h1  className="fixed  text-gray-500
+                 transition-all duration-500 ease-in-out mt-[-10%]
+                  w-[50%] text-2xl
+                  left-[33%] 
+                  sm:left-[45%] sm-text2xl 
+                  md:left-[45%] md:text-2xl
+                  lg:left-[38%] lg:text-3xl
+                  xl:left-[45%] 
+                ">
+                Fetching notes...
+              </h1>
+            </div>
+           
+            ) : notes.length == 0 && filteredNotes.length == 0 && (
             <div
               className="absolute mt-[12rem] sm:mt-[10rem] md:mt-[5rem] xl:-ml-[4rem]  left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 flex flex-col items-center justify-center pointer-events-none"
               style={{ zIndex: 10 }}
@@ -346,7 +357,7 @@ const NotepadComponent: React.FC = () => {
             {filteredNotes.map((note, index) => (
               <motion.div
                 key={note.note_id}
-                className="active:scale-20 relative mb-2 transform cursor-pointer rounded-3xl border shadow-lg transition-transform duration-200 hover:scale-105 hover:shadow-xl"
+                className="active:scale-20 ml-[5%] sm:ml-0 relative mb-2 transform cursor-pointer rounded-3xl border shadow-lg transition-transform duration-200 hover:scale-105 hover:shadow-xl"
                 style={{
                   width: "16rem", // Set consistent width
                   minHeight: "16rem", // Set consistent height

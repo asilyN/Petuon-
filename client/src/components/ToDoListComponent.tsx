@@ -944,7 +944,7 @@ const ToDoListComponent: React.FC<ToDoListProps> = ({
           {loading ? (
             <h1
               style={{ fontFamily: '"Signika Negative", sans-serif' }}
-              className="fixed left-[23rem] top-[15.5rem] text-center text-2xl text-gray-500"
+              className="fixed left-[9rem] sm:left-[23rem] top-[15.5rem] text-center text-2xl text-gray-500"
             >
               Fetching tasks...
             </h1>
@@ -953,7 +953,7 @@ const ToDoListComponent: React.FC<ToDoListProps> = ({
               {filterTasks.length === 0 ? (
                 <>
                   <img
-                    src="src/assets/sleeping_penguin2.gif"
+                    src={sleepingPenguin}
                     alt="No tasks available"
                     className="mx-auto mt-[2rem] h-[10rem] w-[10rem]"
                   />
