@@ -15,7 +15,7 @@ export const QuizFlashcard: React.FC<quizFlashcardProps> = ({ setOnFirstPage, fl
   const [showAnswer, setShowAnswer] = useState(false);
   const [quizState, setQuizState] = useState<"review" | "fillBlanks" | "finished">("review");
   const [userScore, setUserScore] = useState(0);
-  const [petCurrency, setPetCurrency] = useState(0); // New state variable
+
   const [attempts, setAttempts] = useState(3);
   const [answerStatus, setAnswerStatus] = useState<"correct" | "incorrect" | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -225,7 +225,7 @@ export const QuizFlashcard: React.FC<quizFlashcardProps> = ({ setOnFirstPage, fl
       ) : isQuizComplete ? (
         <div className="flex flex-col items-center">
           {/* Quiz Completion UI */}
-          <h2 style={{ fontFamily: '"Signika Negative", sans-serif' }} className="text-5xl text-[#354F52] font-bold mb-4 -mt-[25rem]">
+          <h2 style={{ fontFamily: '"Signika Negative", sans-serif' }} className="text-3xl lg:text-5xl text-[#354F52] font-bold mb-4 -mt-[20rem]">
             FlashCard Complete! Well Done!
           </h2>
           <p
@@ -251,7 +251,7 @@ export const QuizFlashcard: React.FC<quizFlashcardProps> = ({ setOnFirstPage, fl
           <button
             onClick={handleStartNewQuiz}
             style={{ fontFamily: '"Signika Negative", sans-serif' }}
-            className="text-white text-sm md:text-base xl:text-xl bg-[#354F52] p-4 w-[5rem] md:w-[8rem] xl:w-[10rem] h-[3rem] rounded-2xl mr-10 md:mr-20 mt-0 xl:mt-[2rem] z-10 absolute right-10 top-[8rem] xl:top-[16rem] shadow-lg hover:bg-[#52796F] hover:scale-105 flex items-center justify-center"
+            className="bg-[#354F52] text-white h-10 w-36 rounded-full mt-6 ml-[1rem] transform transition-transform duration-200 hover:scale-125 hover:text-white"
           >
             Start Quiz
           </button>
